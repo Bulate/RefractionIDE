@@ -22,3 +22,6 @@ Using Refraction is really easy. Just open the editor, load your test cases, wri
 * A C++ compilator installed.
 * The QT library installed.
 * This software is designed to work on Linux devices.
+
+## About this project
+This software was developed as a final project for the Programming 2 class, on the University of Costa Rica, by the students: Bryan Ulate, Cristian Rodriguez and Diego Orozco, under the guide of proffesor Jeisson Hidalgo.
