@@ -30,11 +30,13 @@ SOURCES += \
     source/MainWindow.cpp \
     source/RefractionIDE.cpp \
     source/CodeEditor.cpp \
-    source/ResultsDockWidget.cpp
+   source/ResultsDockWidget.cpp
+    source/SyntaxHighlighter.cpp \
 
 HEADERS += \
     source/MainWindow.h \
     source/RefractionIDE.h \
     source/CodeEditor.h \
     source/ResultsDockWidget.h
+    source/SyntaxHighlighter.h \
 

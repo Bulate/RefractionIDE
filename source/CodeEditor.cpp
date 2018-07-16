@@ -1,4 +1,5 @@
 #include "CodeEditor.h"
+#include "SyntaxHighlighter.h"
 
 CodeEditor::CodeEditor(QWidget* parent)
     : QPlainTextEdit(parent)
@@ -13,8 +14,8 @@ CodeEditor::CodeEditor(QWidget* parent)
 //	QFontMetrics metrics(font);
 //	setTabStopWidth(tabStop * metrics.width(' '));
 
-//	// Create the object that will provide color to C++ code within the editor
-//	highlighter = new SyntaxHighlighter( document() );
+    // Create the object that will provide color to C++ code within the editor
+    highlighter = new SyntaxHighlighter( document() );
 
 //	// The idle timer always work in single shot basics
 //	autoSaveTimer->setSingleShot(true);
