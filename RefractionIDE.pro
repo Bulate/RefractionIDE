@@ -24,27 +24,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 INCLUDEPATH += \
 	source \
-	source/compiler \
 
 SOURCES += \
     source/main.cpp \
     source/MainWindow.cpp \
     source/RefractionIDE.cpp \
     source/CodeEditor.cpp \
-        source/Compiler/Compiler.cpp \
-        source/Compiler/CompilerCall.cpp \
-        source/Compiler/CompilerDiagnostic.cpp \
-        source/Compiler/Diagnostic.cpp \
-        source/Compiler/LinkerCall.cpp \
-        source/Compiler/LinkerDiagnostic.cpp \
 
 HEADERS += \
     source/MainWindow.h \
     source/RefractionIDE.h \
     source/CodeEditor.h \
-    source/Compiler/Compiler.h \
-	source/Compiler/CompilerCall.h \
-	source/Compiler/CompilerDiagnostic.h \
-	source/Compiler/Diagnostic.h \
-	source/Compiler/LinkerCall.h \
-	source/Compiler/LinkerDiagnostic.h \
+
