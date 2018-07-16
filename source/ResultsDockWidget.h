@@ -6,6 +6,8 @@
 #include <QTabWidget>
 #include <QTextEdit>
 
+class StandardInputOutputInspector;
+
 
 class ResultsDockWidget : public QDockWidget
 {
@@ -20,6 +22,9 @@ protected:
   QTextEdit* compilerOutputTab;
   /// A control to display compiler, linker and debugger output
   QListWidget* toolsOutput;
+  /// Let user compare differences between test case's input/output/error and his/her solution
+  StandardInputOutputInspector* standardInputOutputInspector = nullptr;
+
 //  /// Let user compare differences between test case's input/output/error and his/her solution
 //  StandardInputOutpInspector* standardInputOutputInspector = nullptr;
 };

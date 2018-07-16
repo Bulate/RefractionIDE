@@ -1,4 +1,5 @@
 #include "ResultsDockWidget.h"
+#include "StandardInputOutputInspector.h"
 
 ResultsDockWidget::ResultsDockWidget(QWidget* parent, Qt::WindowFlags flags)
     : QDockWidget(tr("Results"), parent, flags)
@@ -31,6 +32,10 @@ ResultsDockWidget::ResultsDockWidget(QWidget* parent, Qt::WindowFlags flags)
 
 //	// Some messages received by the LogManager may be shown in the GUI
 //	LogManager::setMessagesArea(this);
+
+   standardInputOutputInspector = new StandardInputOutputInspector();
+   resultsTabWidget->addTab(standardInputOutputInspector,tr("Input/Ouput/Expected"));
+
 
 //	// Add a third tab: for player's solution input/output
 //	standardInputOutputInspector = new StandardInputOutputInspector();
