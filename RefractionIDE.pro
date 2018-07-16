@@ -32,7 +32,9 @@ SOURCES += \
     source/CodeEditor.cpp \
     source/ResultsDockWidget.cpp \
     source/SyntaxHighlighter.cpp \
-    source/StandardInputOutputInspector.cpp
+    source/StandardInputOutputInspector.cpp \
+    source/LineNumberArea.cpp \
+    source/Common.cpp
 
 
 
@@ -42,7 +44,9 @@ HEADERS += \
     source/CodeEditor.h \
     source/ResultsDockWidget.h \
     source/SyntaxHighlighter.h \
-    source/StandardInputOutputInspector.h
+    source/StandardInputOutputInspector.h \
+    source/LineNumberArea.h \
+    source/Common.h
 
 
 
