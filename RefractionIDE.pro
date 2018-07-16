@@ -23,20 +23,26 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 INCLUDEPATH += \
-	source \
+        source \
 
 SOURCES += \
     source/main.cpp \
     source/MainWindow.cpp \
     source/RefractionIDE.cpp \
     source/CodeEditor.cpp \
-   source/ResultsDockWidget.cpp
+    source/ResultsDockWidget.cpp \
     source/SyntaxHighlighter.cpp \
+    source/StandardInputOutputInspector.cpp
+
+
 
 HEADERS += \
     source/MainWindow.h \
     source/RefractionIDE.h \
     source/CodeEditor.h \
-    source/ResultsDockWidget.h
+    source/ResultsDockWidget.h \
     source/SyntaxHighlighter.h \
+    source/StandardInputOutputInspector.h
+
+
 

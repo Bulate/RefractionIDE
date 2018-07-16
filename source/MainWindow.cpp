@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
     addDockWidget(Qt::BottomDockWidgetArea , resultsDockWidget);
 
 
+
 }
 
 MainWindow::~MainWindow()
