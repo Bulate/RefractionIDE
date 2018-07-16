@@ -4,6 +4,7 @@
 #include <QPlainTextEdit>
 
 
+
 ///Foward declarations
 class SyntaxHighlighter;
 

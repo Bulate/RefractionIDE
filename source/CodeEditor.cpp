@@ -1,18 +1,24 @@
 #include "CodeEditor.h"
 #include "SyntaxHighlighter.h"
 
+#include <QPainter>
+
+
+// A tab is visualized as 4 space characters
+const int tabStop = 4; // characters
+
 CodeEditor::CodeEditor(QWidget* parent)
     : QPlainTextEdit(parent)
 //	, autoSaveTimer( new QTimer(this) )
 //	, lineNumberArea( new LineNumberArea(this) )
 {
     // Set the default monospaced font of the game
-//	const QFont& font = BotNeumannApp::getMonospacedFont();
-//	setFont(font);
+    const QFont font ("Liberation Mono");
+    setFont(font);
 
-//	// Make tabs the same size than 4 spaces
-//	QFontMetrics metrics(font);
-//	setTabStopWidth(tabStop * metrics.width(' '));
+    // Make tabs the same size than 4 spaces
+    QFontMetrics metrics(font);
+    setTabStopWidth(tabStop * metrics.width(' '));
 
     // Create the object that will provide color to C++ code within the editor
     highlighter = new SyntaxHighlighter( document() );
