@@ -14,7 +14,7 @@ ResultsDockWidget::ResultsDockWidget(QWidget* parent, Qt::WindowFlags flags)
 
 //	// Add the first tab (page): the unit problem description
     compilerOutputTab = new QTextEdit();
-//	unitDescription->setReadOnly(true);
+    compilerOutputTab->setReadOnly(true);
 //	unitDescription->document()->setDefaultFont(BotNeumannApp::getRobotFont());
 //	unitDescription->document()->setDefaultStyleSheet("pre { margin-left: 1em; background: #ddd; }");
 //	QIcon unitDescriptionIcon(":/button_information.svg");
