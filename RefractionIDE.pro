@@ -23,30 +23,29 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 INCLUDEPATH += \
-        source \
+
 
 SOURCES += \
+    source/CodeSegment/CodeEditor.cpp \
+    source/CodeSegment/LineNumberArea.cpp \
+    source/CodeSegment/SyntaxHighlighter.cpp \
+    source/Common/Common.cpp \
+    source/Results/ResultsDockWidget.cpp \
+    source/Results/StandardInputOutputInspector.cpp \
     source/main.cpp \
     source/MainWindow.cpp \
-    source/RefractionIDE.cpp \
-    source/CodeEditor.cpp \
-    source/ResultsDockWidget.cpp \
-    source/SyntaxHighlighter.cpp \
-    source/StandardInputOutputInspector.cpp \
-    source/LineNumberArea.cpp \
-    source/Common.cpp
-
+    source/RefractionIDE.cpp
 
 
 HEADERS += \
+    source/CodeSegment/CodeEditor.h \
+    source/CodeSegment/LineNumberArea.h \
+    source/CodeSegment/SyntaxHighlighter.h \
+    source/Common/Common.h \
+    source/Results/ResultsDockWidget.h \
+    source/Results/StandardInputOutputInspector.h \
     source/MainWindow.h \
-    source/RefractionIDE.h \
-    source/CodeEditor.h \
-    source/ResultsDockWidget.h \
-    source/SyntaxHighlighter.h \
-    source/StandardInputOutputInspector.h \
-    source/LineNumberArea.h \
-    source/Common.h
+    source/RefractionIDE.h
 
 
 
