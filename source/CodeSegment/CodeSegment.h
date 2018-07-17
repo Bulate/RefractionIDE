@@ -41,8 +41,8 @@ class CodeSegment : public QDockWidget
 //	PlayerSolution* playerSolution = nullptr;
 
   protected: // Edit toolbar
-    /// Create new files in the solution: header file, source file and C++ classes
-    QAction* newFileAction;
+//    /// Create new files in the solution: header file, source file and C++ classes
+//    QAction* newFileAction;
     /// Undoes the last action done in the editor
     QAction* undoAction;
     /// Redoes the last undone action in the editor
@@ -60,9 +60,9 @@ class CodeSegment : public QDockWidget
     /// Executes and animates the code or pauses it if already running
     QAction* runAction;
     /// If visualisation is paused, executes the next code statement in the current function
-    QAction* stepForwardAction;
-    /// Stops the visualisation of the code, if it is running
-    QAction* stopAction;
+//    QAction* stepForwardAction;
+//    /// Stops the visualisation of the code, if it is running
+//    QAction* stopAction;
 //    /// Allows user to set the speed of the visualization
 //    QSlider* visualizationSpeedSlider;
 

@@ -51,13 +51,13 @@ void CodeSegment::setupEditingToolbar()
     QToolBar* editToolBar = innerMainWindow->addToolBar(tr("Edit"));
     editToolBar->setIconSize( QSize(toolBarIconSize, toolBarIconSize) );
 
-    // Create new files in the solution
-    newFileAction = new QAction(QIcon(":/unit_playing/buttons/new_file.svg"), tr("&New file"), this);
-    newFileAction->setObjectName("newFile");
-    newFileAction->setShortcut(QKeySequence("Ctrl+N"));
-    newFileAction->setStatusTip(tr("Adds a new file to the solution"));
-    connect(newFileAction, SIGNAL(triggered()), this, SLOT(newFileTriggered()));
-    editToolBar->addAction(newFileAction);
+//    // Create new files in the solution
+//    newFileAction = new QAction(QIcon(":/unit_playing/buttons/new_file.svg"), tr("&New file"), this);
+//    newFileAction->setObjectName("newFile");
+//    newFileAction->setShortcut(QKeySequence("Ctrl+N"));
+//    newFileAction->setStatusTip(tr("Adds a new file to the solution"));
+//    connect(newFileAction, SIGNAL(triggered()), this, SLOT(newFileTriggered()));
+//    editToolBar->addAction(newFileAction);
 
     // Undo
     undoAction = new QAction(QIcon(":/unit_playing/buttons/undo.svg"), tr("&Undo"), this);
@@ -140,13 +140,13 @@ void CodeSegment::setupRunToolbar()
 //    connect(stepForwardAction, SIGNAL(triggered()), this, SIGNAL(userSteppedForward()));
 //    toolBar->addAction(stepForwardAction);
 
-    // Create the stop button
-    stopAction = new QAction(QIcon(":/unit_playing/buttons/stop.svg"), tr("S&top"), this);
-    stopAction->setShortcut(QKeySequence("Ctrl+T"));
-    stopAction->setToolTip(tr("Stop the visualization (Ctrl+T)"));
-    stopAction->setEnabled(true);
-    connect(stopAction, SIGNAL(triggered()), this, SIGNAL(userStopped()));
-    toolBar->addAction(stopAction);
+//    // Create the stop button
+//    stopAction = new QAction(QIcon(":/unit_playing/buttons/stop.svg"), tr("S&top"), this);
+//    stopAction->setShortcut(QKeySequence("Ctrl+T"));
+//    stopAction->setToolTip(tr("Stop the visualization (Ctrl+T)"));
+//    stopAction->setEnabled(true);
+//    connect(stopAction, SIGNAL(triggered()), this, SIGNAL(userStopped()));
+//    toolBar->addAction(stopAction);
 
 //    // Create the control that allows user to set the speed of the visualization
 //    visualizationSpeedSlider = new QSlider(Qt::Horizontal, this);
