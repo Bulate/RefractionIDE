@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 class CodeEditor;
+class CodeSegment;
 class ResultsDockWidget;
 
 class MainWindow : public QMainWindow
@@ -12,7 +13,7 @@ class MainWindow : public QMainWindow
 private:
     CodeEditor * codeEditor = nullptr;
     ResultsDockWidget *resultsDockWidget = nullptr;
-
+    CodeSegment * codeSegment = nullptr;
 public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();

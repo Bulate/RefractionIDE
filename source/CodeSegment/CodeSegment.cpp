@@ -1,0 +1,355 @@
+#include "CodeEditor.h"
+#include "CodeSegment.h"
+// #include "CompiledProgram.h"     IMPORTANTE HACER LA IMPLEMENTACION
+// #include "Compiler.h"
+//#include "Diagnostic.h"
+//#include "ExecutionThread.h"
+//#include "LogManager.h"
+//#include "PlayerSolution.h"
+//#include "Unit.h"
+//#include "VisualizationContext.h"
+//#include "VisualizationSpeed.h"
+
+#include <QAction>
+#include <QComboBox>
+#include <QMainWindow>
+#include <QSlider>
+#include <QToolBar>
+
+// Default width and height of the tools in toolbars
+const int toolBarIconSize = 18;
+
+CodeSegment::CodeSegment(QWidget *parent, Qt::WindowFlags flags)
+    : QDockWidget(tr("Program Options"), parent, flags)
+    , innerMainWindow( new QMainWindow(this) )
+{
+    setObjectName("codeSegment");
+
+    setupInnerWidget();
+//    setupCodeEditor(); // It must be called before the toolbars
+    setupEditingToolbar();
+    innerMainWindow->addToolBarBreak();
+    setupRunToolbar();
+}
+
+//CodeSegment::~CodeSegment()
+//{
+//}
+///*
+void CodeSegment::setupInnerWidget()
+{
+    // Ask the main window to behave as normal widget, instead of a real main window
+    innerMainWindow->setWindowFlags(Qt::Widget);
+
+    // Set the inner main window as the inner widget of this dock widget
+    setWidget(innerMainWindow);
+}
+
+void CodeSegment::setupEditingToolbar()
+{
+    // Create the toolbar
+    QToolBar* editToolBar = innerMainWindow->addToolBar(tr("Edit"));
+    editToolBar->setIconSize( QSize(toolBarIconSize, toolBarIconSize) );
+
+    // Create new files in the solution
+    newFileAction = new QAction(QIcon(":/unit_playing/buttons/new_file.svg"), tr("&New file"), this);
+    newFileAction->setObjectName("newFile");
+    newFileAction->setShortcut(QKeySequence("Ctrl+N"));
+    newFileAction->setStatusTip(tr("Adds a new file to the solution"));
+    connect(newFileAction, SIGNAL(triggered()), this, SLOT(newFileTriggered()));
+    editToolBar->addAction(newFileAction);
+
+    // Undo
+    undoAction = new QAction(QIcon(":/unit_playing/buttons/undo.svg"), tr("&Undo"), this);
+    undoAction->setObjectName("undo");
+    undoAction->setEnabled(true);
+    undoAction->setShortcut(QKeySequence("Ctrl+Z"));
+    undoAction->setStatusTip(tr("Undoes the last action done in the editor"));
+    connect(codeEditor, SIGNAL(undoAvailable(bool)), undoAction, SLOT(setEnabled(bool)));
+    connect(undoAction, SIGNAL(triggered()), codeEditor, SLOT(undo()));
+    editToolBar->addAction(undoAction);
+
+    // Redo
+    redoAction = new QAction(QIcon(":/unit_playing/buttons/redo.svg"), tr("&Redo"), this);
+    redoAction->setObjectName("redo");
+    redoAction->setEnabled(true);
+    redoAction->setShortcut(QKeySequence("Ctrl+Shift+Z"));
+    redoAction->setStatusTip(tr("Redoes the last undone action in the editor"));
+    connect(codeEditor, SIGNAL(redoAvailable(bool)), redoAction, SLOT(setEnabled(bool)));
+    connect(redoAction, SIGNAL(triggered()), codeEditor, SLOT(redo()));
+    editToolBar->addAction(redoAction);
+
+    // Cut
+    cutAction = new QAction(QIcon(":/unit_playing/buttons/cut.svg"), tr("C&ut"), this);
+    cutAction->setObjectName("cut");
+    cutAction->setEnabled(true);
+    cutAction->setShortcut(QKeySequence("Ctrl+X"));
+    cutAction->setStatusTip(tr("Moves the selection to the clipboard"));
+    connect(codeEditor, SIGNAL(copyAvailable(bool)), cutAction, SLOT(setEnabled(bool)));
+    connect(cutAction, SIGNAL(triggered()), codeEditor, SLOT(cut()));
+    editToolBar->addAction(cutAction);
+
+    // Copy
+    copyAction = new QAction(QIcon(":/unit_playing/buttons/copy.svg"), tr("&Copy"), this);
+    copyAction->setObjectName("copy");
+    copyAction->setEnabled(true);
+    copyAction->setShortcut(QKeySequence("Ctrl+C"));
+    copyAction->setStatusTip(tr("Copies the selection to the clipboard"));
+    connect(codeEditor, SIGNAL(copyAvailable(bool)), copyAction, SLOT(setEnabled(bool)));
+    connect(copyAction, SIGNAL(triggered()), codeEditor, SLOT(copy()));
+    editToolBar->addAction(copyAction);
+
+    // Paste
+    pasteAction = new QAction(QIcon(":/unit_playing/buttons/paste.svg"), tr("&Paste"), this);
+    pasteAction->setObjectName("paste");
+    pasteAction->setEnabled(true);
+    pasteAction->setShortcut(QKeySequence("Ctrl+V"));
+    pasteAction->setStatusTip(tr("Pastes the clipboard contents over the selection"));
+    connect(pasteAction, SIGNAL(triggered()), codeEditor, SLOT(paste()));
+    editToolBar->addAction(pasteAction);
+
+//    // A combo box to show and choose the active file being edited
+//    fileSelector = new QComboBox();
+//    connect(fileSelector, SIGNAL(currentIndexChanged(QString)), this, SLOT(fileSelectorIndexChanged(QString)));
+//    editToolBar->addWidget(fileSelector);
+
+    innerMainWindow->addToolBar(editToolBar);
+   // setWidget(editToolBar);
+
+}
+
+void CodeSegment::setupRunToolbar()
+{
+    // Create the toolbar
+    QToolBar* toolBar = innerMainWindow->addToolBar(tr("Run"));
+    toolBar->setIconSize( QSize(toolBarIconSize, toolBarIconSize) );
+
+    // Create the Run action
+    runAction = new QAction(QIcon(":/unit_playing/buttons/run.svg"), tr("R&un"), this);
+    runAction->setShortcut(QKeySequence("Ctrl+R"));
+    runAction->setEnabled(true);
+    //   setupRunAction("Run", false);
+    connect(runAction, SIGNAL(triggered()), this, SIGNAL(userRunOrPaused()));
+    toolBar->addAction(runAction);
+
+//    // Create step forward action
+//    stepForwardAction = new QAction(QIcon(":/unit_playing/buttons/step_forward.svg"), tr("Step forward (&Next)"), this);
+//    stepForwardAction->setShortcut(QKeySequence("Ctrl+U"));
+//    stepForwardAction->setToolTip(tr("Step forward: run next statement (Ctrl+U)"));
+//    stepForwardAction->setEnabled(false);
+//    connect(stepForwardAction, SIGNAL(triggered()), this, SIGNAL(userSteppedForward()));
+//    toolBar->addAction(stepForwardAction);
+
+    // Create the stop button
+    stopAction = new QAction(QIcon(":/unit_playing/buttons/stop.svg"), tr("S&top"), this);
+    stopAction->setShortcut(QKeySequence("Ctrl+T"));
+    stopAction->setToolTip(tr("Stop the visualization (Ctrl+T)"));
+    stopAction->setEnabled(true);
+    connect(stopAction, SIGNAL(triggered()), this, SIGNAL(userStopped()));
+    toolBar->addAction(stopAction);
+
+//    // Create the control that allows user to set the speed of the visualization
+//    visualizationSpeedSlider = new QSlider(Qt::Horizontal, this);
+//    visualizationSpeedSlider->setToolTip(tr("Visualization speed: left is slow, right is faster"));
+//    visualizationSpeedSlider->setMaximum(0);
+//    visualizationSpeedSlider->setMaximum(200);
+//    visualizationSpeedSlider->setFocusPolicy(Qt::WheelFocus);
+//    visualizationSpeedSlider->setTickPosition(QSlider::TicksBelow);
+//    visualizationSpeedSlider->setTickInterval(20);
+////	visualizationSpeedSlider->setValue( VisualizationSpeed::getInstance().getSpeed() );
+//    visualizationSpeedSlider->setSingleStep(5);
+//    visualizationSpeedSlider->setPageStep(10);
+//    connect(visualizationSpeedSlider, SIGNAL(valueChanged(int)), this, SLOT(visualizationSpeedChanged(int)));
+//    toolBar->addWidget(visualizationSpeedSlider);
+    innerMainWindow->addToolBar(toolBar);
+
+}
+
+void CodeSegment::setupCodeEditor()
+{
+    // ToDo: Have several code editors, one for each source file in player's solution
+    // The code editor is a QTextEdit object
+    codeEditor = new CodeEditor(this);
+
+//	// Propagate events to the visualization controller and the debugger
+    connect( codeEditor, SIGNAL(breakpointAction(GuiBreakpoint*)), this, SIGNAL(breakpointAction(GuiBreakpoint*)) );
+
+    // Place the code editor as the central widget of this dock widget
+    innerMainWindow->setCentralWidget(codeEditor);
+
+
+    // Do not force users to click the editor in order to start typing on it
+    codeEditor->setFocus();
+}
+
+////void CodeSegment::setupRunAction(const QString& name, bool enabled)
+////{
+////	runOrPauseAction->setObjectName(name);
+////	runOrPauseAction->setIcon( QIcon(":/unit_playing/buttons/run.svg") );
+////	runOrPauseAction->setToolTip(name == "Run" ? tr("Run: compiles the code and starts the visualization (Ctrl+R)") : tr("Resumes the visualization (Ctrl+R)"));
+////	runOrPauseAction->setShortcut(QKeySequence("Ctrl+R"));
+
+////	runOrPauseAction->setEnabled(enabled);
+////}
+
+////void CodeSegment::setupPauseAction(bool enabled)
+////{
+////	runOrPauseAction->setObjectName("Pause");
+////	runOrPauseAction->setIcon(QIcon(":/unit_playing/buttons/pause.svg"));
+////	runOrPauseAction->setToolTip(tr("Pauses the visualization (Ctrl+P)"));
+////	runOrPauseAction->setShortcut(QKeySequence("Ctrl+P"));
+
+////	runOrPauseAction->setEnabled(enabled);
+////}
+
+//////void CodeSegment::loadPlayerCodeForUnit(PlayerSolution* playerSolution, Unit* unit)
+////{
+////	// We need the player solution later also
+////	Q_ASSERT(playerSolution);
+////	this->playerSolution = playerSolution;
+
+////	// Fill the file selector with the list of files that comprise this player solution
+////	fileSelector->clear();
+////	fileSelector->addItems( playerSolution->getEditableSourceNames() );
+
+////	// Ask the editor to show this source
+////	const QFileInfo& lastEditedFilePath = playerSolution->getLastEditedFilePath();
+////	codeEditor->setPlayerSolutionForUnit(unit, playerSolution);
+////	codeEditor->loadInitialFile( lastEditedFilePath.absoluteFilePath() );
+////	fileSelector->setCurrentText( lastEditedFilePath.fileName() );
+
+////	// Now the run button can be triggered
+////	runOrPauseAction->setEnabled(true);
+////}
+
+////void CodeSegment::playerSolutionBuilt(CompiledProgram* playerSolutionProgram)
+////{
+////	// ToDo: if there were compiling or linking errors, mark the lines
+
+////	// If player solution was built with no errors, it will be start animating
+////	if ( playerSolutionProgram->getErrorCount() == 0 )
+////	{
+////		// Save code editor cursors and clear them to reduce noise while animation
+////		Q_ASSERT(codeEditor);
+////		codeEditor->setAnimating(true);
+////	}
+////}
+
+////void CodeSegment::newFileTriggered()
+////{
+////	qCDebug(logNotImplemented) << "New file triggered";
+////}
+
+////void CodeSegment::fileSelectorIndexChanged(const QString& text)
+////{
+////	// Get the full path to the filename and load it in the code editor
+////	codeEditor->loadFile( playerSolution->getPlayerUnitSourcePath(text) );
+////}
+
+////void CodeSegment::visualizationSpeedChanged(int speed)
+////{
+////	qCInfo(logPlayer) << "Visualization speed set to " << speed;
+////	VisualizationSpeed::getInstance().updateSpeed(speed);
+////}
+
+////void CodeSegment::diagnosticSelected(int index)
+////{
+////	Q_ASSERT(playerSolution);
+////	Q_ASSERT(playerSolution->getPlayerSolutionProgram());
+////	Compiler* compiler = playerSolution->*/getPlayerSolutionProgram()->getCompiler();
+
+////	Q_ASSERT(compiler);
+////	Q_ASSERT(index >= 0);
+////	Q_ASSERT(index < compiler->getAllDiagnostics().size());
+
+////	// Get the diagnostic that was selected
+////	Diagnostic* diagnostic = compiler->getAllDiagnostics()[index];
+
+////	// If the diagnostic was produced by a file that is not part of the player solution, for
+////	// example, an external library, do not open the file in the Code Editor
+////	QFileInfo filePath(diagnostic->getFilename());
+////	if ( playerSolution->findFileIndex(filePath) == -1 )
+////		return;
+
+////	// The file is part of the solution. Select it in the file selector
+////	fileSelector->setCurrentText( filePath.fileName() );
+
+////	// Place the cursor on the line and column where the diagnostic was detected
+////	codeEditor->placeCursor( diagnostic->getLine(), diagnostic->getColumn() );
+////}
+
+////QList<GuiBreakpoint*> CodeSegment::retrieveBreakpoints()
+////{
+////	// ToDo: for each opened source file (i.e. have several code editors open)
+////	return codeEditor->retrieveBreakpoints();
+////}
+
+////void CodeSegment::onStateChanged(UnitPlayingState currentState)
+////{
+////	// If user asked to build, save changes in all editors (if any)
+////	if ( currentState == UnitPlayingState::building )
+////		codeEditor->saveChanges();
+
+////	// Visualization control buttons enable or disable depending on the current state
+////	bool run      = currentState == UnitPlayingState::editing;
+////	bool resume   = currentState == UnitPlayingState::paused;
+////	bool pause    = currentState == UnitPlayingState::animating;
+////	bool step     = currentState == UnitPlayingState::paused;
+
+////	bool stop     = currentState == UnitPlayingState::animating
+////				 || currentState == UnitPlayingState::paused
+////				 || currentState == UnitPlayingState::finished;
+
+////	// Enable actions according to the current state
+////	stepForwardAction->setEnabled(step);
+////	stopAction->setEnabled(stop);
+
+////	// Run or pause share the same action
+////	if ( run )
+////		setupRunAction("Run", true);
+////	else if ( resume )
+////		setupRunAction("Resume", true);
+////	else if ( pause )
+////		setupPauseAction(true);
+////	else
+////		runOrPauseAction->setEnabled(false);
+////}
+
+////void CodeSegment::clearAnimation()
+////{
+////	// Remove all the highlights in code editors
+////	Q_ASSERT(codeEditor);
+////	codeEditor->setAnimating(false);
+////}
+
+////void CodeSegment::executionThreadUpdated(ExecutionThread* executionThread, int& maxDuration)
+////{
+////	// Get the file index of the execution thread
+////	Q_UNUSED(maxDuration);
+////	Q_ASSERT(playerSolution);
+
+////	// If we have to clear the previous highlighted line
+////	if ( executionThread->getPreviousLineNumber() > 0 )
+////	{
+////		// Clear the previous highlighted line only if this is the shown file
+////		int fileIndex = playerSolution->findFileIndex( executionThread->getPreviousFilename() );
+////		if ( fileIndex >= 0 && fileIndex == fileSelector->currentIndex() )
+////			codeEditor->clearHighlight( executionThread->getPreviousLineNumber(), executionThread->getHighlightColor(), false );
+////	}
+
+////	// If we have to highlight the line being executed
+////	if ( executionThread->getLineNumber() > 0 )
+////	{
+////		// Clear the previous highlighted line only if this is the shown file
+////		int fileIndex = playerSolution->findFileIndex( executionThread->getFilename() );
+////		if ( fileIndex >= 0 && fileIndex == fileSelector->currentIndex() )
+////		{
+////			codeEditor->addHighlight( executionThread->getLineNumber(), executionThread->getHighlightColor(), true );
+////			codeEditor->makeLineVisible( executionThread->getLineNumber() );
+
+////			// The update was accepted, we feedback the execution thread in order to update the
+////			// line number on the actor (robot) and make a backup of the filename and line number
+////			updateMaxDuration( executionThread->locationUpdateAccepted() );
+////		}
+////	}
+////}

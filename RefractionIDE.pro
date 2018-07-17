@@ -22,8 +22,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-INCLUDEPATH += \
 
+# Application icon. Affects only Mac OS X
+ICON = assets/logo.jpg
+
+INCLUDEPATH += \
+        source \
+        source/Common \
+        source/CodeSegment \
+        source/Results \
 
 SOURCES += \
     source/CodeSegment/CodeEditor.cpp \
@@ -34,7 +41,8 @@ SOURCES += \
     source/Results/StandardInputOutputInspector.cpp \
     source/main.cpp \
     source/MainWindow.cpp \
-    source/RefractionIDE.cpp
+    source/RefractionIDE.cpp \
+    source/CodeSegment/CodeSegment.cpp
 
 
 HEADERS += \
@@ -45,7 +53,11 @@ HEADERS += \
     source/Results/ResultsDockWidget.h \
     source/Results/StandardInputOutputInspector.h \
     source/MainWindow.h \
-    source/RefractionIDE.h
+    source/RefractionIDE.h \
+    source/CodeSegment/CodeSegment.h
 
+
+RESOURCES += \
+        assets/assets.qrc \
 
 
