@@ -93,9 +93,9 @@ class CodeSegment : public QDockWidget
 //	/// Called when an execution thread was updated from GDB in order to update the highlighted line
 ////	void executionThreadUpdated(ExecutionThread* executionThread, int& maxDuration);
 
-//  signals:
+ signals:
 //	/// Emitted when user presses the Run/Pause button
-//	void userRunOrPaused();
+    void userRunOrPaused();
 //	/// Called when the step over button is pressed
 //	void userSteppedForward();
 //	/// Emitted when the stop button is pressed
@@ -105,7 +105,8 @@ class CodeSegment : public QDockWidget
 //	/// the breakpont in debugger when visualization is running.
 ////	void breakpointAction(GuiBreakpoint* guiBreakpoint);  NO SE USA
 
-//  protected:
+ protected:
+    QAction* runOrPauseAction;
 //	/// Set up the inner main window
     void setupInnerWidget();
 //	/// Create standard editing tool bar with undo, copy, run, debug and other actions

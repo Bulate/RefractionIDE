@@ -1,5 +1,6 @@
 #include "CodeEditor.h"
 #include "CodeSegment.h"
+#include <iostream>
 // #include "CompiledProgram.h"     IMPORTANTE HACER LA IMPLEMENTACION
 // #include "Compiler.h"
 //#include "Diagnostic.h"
@@ -117,7 +118,6 @@ void CodeSegment::setupEditingToolbar()
    // setWidget(editToolBar);
 
 }
-
 void CodeSegment::setupRunToolbar()
 {
     // Create the toolbar
@@ -128,8 +128,9 @@ void CodeSegment::setupRunToolbar()
     runAction = new QAction(QIcon(":/unit_playing/buttons/run.svg"), tr("R&un"), this);
     runAction->setShortcut(QKeySequence("Ctrl+R"));
     runAction->setEnabled(true);
-    //   setupRunAction("Run", false);
-    connect(runAction, SIGNAL(triggered()), this, SIGNAL(userRunOrPaused()));
+
+     //  setupRunAction("Run", false);
+    connect(runAction, SIGNAL(triggered()), this, SIGNAL(userRunOrPaused())  );
     toolBar->addAction(runAction);
 
 //    // Create step forward action
@@ -172,7 +173,7 @@ void CodeSegment::setupCodeEditor()
     codeEditor = new CodeEditor(this);
 
 //	// Propagate events to the visualization controller and the debugger
-    connect( codeEditor, SIGNAL(breakpointAction(GuiBreakpoint*)), this, SIGNAL(breakpointAction(GuiBreakpoint*)) );
+    //connect( codeEditor, SIGNAL(breakpointAction(GuiBreakpoint*)), this, SIGNAL(breakpointAction(GuiBreakpoint*)) );
 
     // Place the code editor as the central widget of this dock widget
     innerMainWindow->setCentralWidget(codeEditor);
@@ -182,15 +183,17 @@ void CodeSegment::setupCodeEditor()
     codeEditor->setFocus();
 }
 
-////void CodeSegment::setupRunAction(const QString& name, bool enabled)
-////{
-////	runOrPauseAction->setObjectName(name);
-////	runOrPauseAction->setIcon( QIcon(":/unit_playing/buttons/run.svg") );
-////	runOrPauseAction->setToolTip(name == "Run" ? tr("Run: compiles the code and starts the visualization (Ctrl+R)") : tr("Resumes the visualization (Ctrl+R)"));
-////	runOrPauseAction->setShortcut(QKeySequence("Ctrl+R"));
+void CodeSegment::setupRunAction(const QString& name, bool enabled)
+{
+    runOrPauseAction = new QAction(this);
 
-////	runOrPauseAction->setEnabled(enabled);
-////}
+    runOrPauseAction->setObjectName(name);
+    runOrPauseAction->setIcon( QIcon(":/unit_playing/buttons/run.svg") );
+    runOrPauseAction->setToolTip(name == "Run" ? tr("Run: compiles the code and starts the visualization (Ctrl+R)") : tr("Resumes the visualization (Ctrl+R)"));
+    runOrPauseAction->setShortcut(QKeySequence("Ctrl+R"));
+
+    runOrPauseAction->setEnabled(enabled);
+}
 
 ////void CodeSegment::setupPauseAction(bool enabled)
 ////{
