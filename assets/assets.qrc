@@ -1,0 +1,55 @@
+<RCC>
+	<qresource prefix="/">
+		<file>game_logo.svg</file>
+		<file>game_title.svg</file>
+		<file>button_information.svg</file>
+		<file>general.svg</file>
+		<file>game_menu.svg</file>
+		<file>unit_selection.svg</file>
+		<file>unit_playing.svg</file>
+	</qresource>
+	<qresource prefix="/fonts">
+		<file>fonts/liberation_mono_regular.ttf</file>
+		<file>fonts/tenby_five.otf</file>
+	</qresource>
+	<qresource prefix="/source_code">
+		<file alias="bn_c_generator.h">source_code/bn_c_generator.h</file>
+		<file alias="bn_cpp_generator.h">source_code/bn_cpp_generator.h</file>
+		<file alias="bn_player_solution.c">source_code/bn_player_solution.c</file>
+	</qresource>
+	<qresource prefix="/unit_playing/buttons">
+		<file alias="accept.svg">unit_playing/buttons/accept.svg</file>
+		<file alias="copy.svg">unit_playing/buttons/copy.svg</file>
+		<file alias="cut.svg">unit_playing/buttons/cut.svg</file>
+		<file alias="error.svg">unit_playing/buttons/error.svg</file>
+		<file alias="find_and_replace.svg">unit_playing/buttons/find_and_replace.svg</file>
+		<file alias="info.svg">unit_playing/buttons/info.svg</file>
+		<!-- input_output.svg adapted from https://openclipart.org/detail/105637/danger-electric-leakage -->
+		<file alias="input_output.svg">unit_playing/buttons/input_output.svg</file>
+		<file alias="link_broken.svg">unit_playing/buttons/link_broken.svg</file>
+		<!-- Icon monitor.svg made by http://www.flaticon.com/authors/iconnice, adapted by jhc -->
+		<file alias="monitor.svg">unit_playing/buttons/monitor.svg</file>
+		<file alias="new_file.svg">unit_playing/buttons/new_file.svg</file>
+		<file alias="paste.svg">unit_playing/buttons/paste.svg</file>
+		<file alias="pause.svg">unit_playing/buttons/pause.svg</file>
+		<file alias="redo.svg">unit_playing/buttons/redo.svg</file>
+		<file alias="run.svg">unit_playing/buttons/run.svg</file>
+		<file alias="step_forward.svg">unit_playing/buttons/step_forward.svg</file>
+		<file alias="stop.svg">unit_playing/buttons/stop.svg</file>
+		<file alias="undo.svg">unit_playing/buttons/undo.svg</file>
+		<file alias="warning.svg">unit_playing/buttons/warning.svg</file>
+	</qresource>
+	<qresource prefix="/unit_playing/data_types">
+		<file alias="float_left.svg">unit_playing/data_types/float_left.svg</file>
+		<file alias="float_middle.svg">unit_playing/data_types/float_middle.svg</file>
+		<file alias="float_right.svg">unit_playing/data_types/float_right.svg</file>
+		<file alias="int_left.svg">unit_playing/data_types/int_left.svg</file>
+		<file alias="int_middle.svg">unit_playing/data_types/int_middle.svg</file>
+		<file alias="int_right.svg">unit_playing/data_types/int_right.svg</file>
+		<file alias="pointer_left.svg">unit_playing/data_types/pointer_left.svg</file>
+		<file alias="pointer_left_invalid.svg">unit_playing/data_types/pointer_left_invalid.svg</file>
+		<file alias="pointer_left_ok.svg">unit_playing/data_types/pointer_left_ok.svg</file>
+		<file alias="pointer_middle.svg">unit_playing/data_types/pointer_middle.svg</file>
+		<file alias="pointer_right.svg">unit_playing/data_types/pointer_right.svg</file>
+	</qresource>
+</RCC>

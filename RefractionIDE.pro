@@ -31,6 +31,7 @@ INCLUDEPATH += \
         source/Common \
         source/CodeSegment \
         source/Results \
+        assets \
 
 SOURCES += \
     source/CodeSegment/CodeEditor.cpp \
@@ -55,6 +56,9 @@ HEADERS += \
     source/MainWindow.h \
     source/RefractionIDE.h \
     source/CodeSegment/CodeSegment.h
+
+RESOURCES += \
+    assets/assets.qrc
 
 
 
