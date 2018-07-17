@@ -12,11 +12,11 @@ MainWindow::MainWindow(QWidget *parent)
     setMinimumSize(480, 320);
 //    codeEditor = new CodeEditor(this);
     codeSegment = new CodeSegment(this);
-//    setCentralWidget(codeEditor);
+    setCentralWidget(codeSegment);
+
     resultsDockWidget = new ResultsDockWidget(this);
     addDockWidget(Qt::BottomDockWidgetArea , resultsDockWidget);
-    addDockWidget(Qt::TopDockWidgetArea , codeSegment);
-
+  //  addDockWidget(Qt::TopDockWidgetArea , codeSegment);
 
 
 }
