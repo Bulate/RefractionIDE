@@ -5,6 +5,7 @@ ResultsDockWidget::ResultsDockWidget(QWidget* parent, Qt::WindowFlags flags)
     : QDockWidget(tr("Results"), parent, flags)
     //, compiler(nullptr)
 {
+    setFeatures(QDockWidget::DockWidgetMovable);
 //	// QMainWindow requires all its direct children have a name to store preferences
     setObjectName("ResultsDockWidget");
 

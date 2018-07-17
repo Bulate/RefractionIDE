@@ -24,7 +24,7 @@ CodeSegment::CodeSegment(QWidget *parent, Qt::WindowFlags flags)
     , innerMainWindow( new QMainWindow(this) )
 {
     setObjectName("codeSegment");
-
+    setFeatures(QDockWidget::NoDockWidgetFeatures);
     setupInnerWidget();
     setupCodeEditor(); // It must be called before the toolbars
     setupEditingToolbar();
