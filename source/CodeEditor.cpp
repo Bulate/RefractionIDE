@@ -1,4 +1,4 @@
-#include "CodeEditor.h"
+﻿#include "CodeEditor.h"
 #include "SyntaxHighlighter.h"
 #include "LineNumberArea.h"
 #include "Common.h"
@@ -55,6 +55,29 @@ void CodeEditor::updateLineNumberAreaWidth()
 }
 
 
+void CodeEditor::resizeEvent(QResizeEvent* event)
+{
+    // When the size of the editor changes, we also need to resize the line number area.
+    QPlainTextEdit::resizeEvent(event);
+
+    // Set to the line number area the same position and dimensions of the code editor, except
+    // its width. The width of the line number depends on the number of lines
+    const QRect& cr = contentsRect();
+    lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), getLineNumberAreaWidth(), cr.height()));
+}
+
+
+void CodeEditor::updateLineNumberArea(const QRect& rect, int dy)
+{
+    // User scrolled the text editor, scroll the line number area also
+    if (dy)
+        lineNumberArea->scroll(0, dy);
+    else
+        lineNumberArea->update(0, rect.y(), lineNumberArea->width(), rect.height());
+
+    if ( rect.contains(viewport()->rect()) )
+        updateLineNumberAreaWidth();
+}
 
 int CodeEditor::getLineNumberAreaWidth()
 {
@@ -85,8 +108,8 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent* event)
     int blockNumber = block.blockNumber();
     int top = (int) blockBoundingGeometry(block).translated(contentOffset()).top();
     int bottom = top + (int) blockBoundingRect(block).height();
-    int lineNumberAreaWidth = getLineNumberAreaWidth();
-    int fontHeight = fontMetrics().height() - 1;
+//    int lineNumberAreaWidth = getLineNumberAreaWidth();
+//    int fontHeight = fontMetrics().height() - 1;
 
     // Adjust these values by the height of the current text block in each iteration in the loop
     while (block.isValid() && top <= event->rect().bottom())

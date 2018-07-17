@@ -1,4 +1,4 @@
-#include "SyntaxHighlighter.h"
+﻿#include "SyntaxHighlighter.h"
 
 static const int notInComment = 0;
 static const int inComment = 1;
@@ -10,7 +10,7 @@ SyntaxHighlighter::SyntaxHighlighter(QTextDocument* parent)
 {
 	createKeywordRules();
 	createSpecialRules();
-	createCommentRules();
+    createCommentRules();
 }
 
 SyntaxHighlighter::~SyntaxHighlighter()
@@ -28,7 +28,7 @@ static const char* const cppKeywords[] =
 	"auto",
 	"bitand",
 	"bitor",
-	"bool",
+    "bool",
 	"break",
 	"case",
 	"catch",
@@ -55,7 +55,7 @@ static const char* const cppKeywords[] =
 	"extern",
 	"false",
 	"float",
-	"for",
+    "for",
 	"friend",
 	"goto",
 	"if",
@@ -85,7 +85,7 @@ static const char* const cppKeywords[] =
 	"static",
 	"static_assert",
 	"static_cast",
-	"struct",
+    "struct",
 	"switch",
 	"template",
 	"this",
@@ -133,7 +133,7 @@ void SyntaxHighlighter::createSpecialRules()
 	charFormat.setForeground(Qt::darkCyan);
 	highlightingRules.append(HighlightingRule("'.*'", charFormat));
 
-	// Functions or methods
+    // Functions or methods
 	QTextCharFormat functionFormat;
 	functionFormat.setForeground(Qt::darkMagenta);
 	highlightingRules.append(HighlightingRule("\\b[A-Za-z0-9_]+(?=\\()", functionFormat));
@@ -157,7 +157,7 @@ void SyntaxHighlighter::createCommentRules()
 	// Single line comments are indentical to other styles
 	QTextCharFormat singleLineCommentFormat;
 	singleLineCommentFormat.setForeground(Qt::darkGreen);
-	highlightingRules.append(HighlightingRule("//[^\n]*", singleLineCommentFormat));
+    highlightingRules.append(HighlightingRule("//[^\n]*", singleLineCommentFormat));
 
 	// According to Qt Syntax Highlighter example: Multiline comment needs special care due to the
 	// design of the QSyntaxHighlighter class. After a QSyntaxHighlighter object is created, its

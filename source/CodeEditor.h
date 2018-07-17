@@ -1,4 +1,4 @@
-#ifndef CODEEDITOR_H
+﻿#ifndef CODEEDITOR_H
 #define CODEEDITOR_H
 
 #include <QPlainTextEdit>
@@ -18,6 +18,8 @@ protected:
     SyntaxHighlighter* highlighter;
     /// Object that paints line numbers in the left margin of the code editor
     LineNumberArea* lineNumberArea;
+    /// Overrided in order to adjust size of the line number area when the code editor is resize
+    virtual void resizeEvent(QResizeEvent* event) override;
 
 public:
     /// Constructor
@@ -34,6 +36,12 @@ protected slots:
     /// Make the left margin of the text editor bigger, in order to have space to the line number
     /// area widget
     void updateLineNumberAreaWidth();
+    /// @brief Invoked when the editor's viewport has been scrolled.
+    /// In the editor we resize and draw the line numbers on the LineNumberArea. We need to do this
+    /// when the number of lines in the editor changes, and when the editor's viewport() is scrolled
+    /// @param rect The part of the editing area that is do be updated (redrawn).
+    /// @param dy holds the number of pixels the view has been scrolled vertically.
+    void updateLineNumberArea(const QRect& rect, int dy);
 
 };
 
