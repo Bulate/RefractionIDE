@@ -10,9 +10,9 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowTitle("Refraction IDE");
     resize(1024, 768); // affects only desktop applications
     setMinimumSize(480, 320);
-    codeEditor = new CodeEditor(this);
+//    codeEditor = new CodeEditor(this);
     codeSegment = new CodeSegment(this);
-    setCentralWidget(codeEditor);
+//    setCentralWidget(codeEditor);
     resultsDockWidget = new ResultsDockWidget(this);
     addDockWidget(Qt::BottomDockWidgetArea , resultsDockWidget);
     addDockWidget(Qt::TopDockWidgetArea , codeSegment);

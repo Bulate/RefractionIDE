@@ -26,7 +26,7 @@ CodeSegment::CodeSegment(QWidget *parent, Qt::WindowFlags flags)
     setObjectName("codeSegment");
 
     setupInnerWidget();
-//    setupCodeEditor(); // It must be called before the toolbars
+    setupCodeEditor(); // It must be called before the toolbars
     setupEditingToolbar();
     innerMainWindow->addToolBarBreak();
     setupRunToolbar();
@@ -62,7 +62,7 @@ void CodeSegment::setupEditingToolbar()
     // Undo
     undoAction = new QAction(QIcon(":/unit_playing/buttons/undo.svg"), tr("&Undo"), this);
     undoAction->setObjectName("undo");
-    undoAction->setEnabled(true);
+    undoAction->setEnabled(false);
     undoAction->setShortcut(QKeySequence("Ctrl+Z"));
     undoAction->setStatusTip(tr("Undoes the last action done in the editor"));
     connect(codeEditor, SIGNAL(undoAvailable(bool)), undoAction, SLOT(setEnabled(bool)));
@@ -72,7 +72,7 @@ void CodeSegment::setupEditingToolbar()
     // Redo
     redoAction = new QAction(QIcon(":/unit_playing/buttons/redo.svg"), tr("&Redo"), this);
     redoAction->setObjectName("redo");
-    redoAction->setEnabled(true);
+    redoAction->setEnabled(false);
     redoAction->setShortcut(QKeySequence("Ctrl+Shift+Z"));
     redoAction->setStatusTip(tr("Redoes the last undone action in the editor"));
     connect(codeEditor, SIGNAL(redoAvailable(bool)), redoAction, SLOT(setEnabled(bool)));
@@ -82,7 +82,7 @@ void CodeSegment::setupEditingToolbar()
     // Cut
     cutAction = new QAction(QIcon(":/unit_playing/buttons/cut.svg"), tr("C&ut"), this);
     cutAction->setObjectName("cut");
-    cutAction->setEnabled(true);
+    cutAction->setEnabled(false);
     cutAction->setShortcut(QKeySequence("Ctrl+X"));
     cutAction->setStatusTip(tr("Moves the selection to the clipboard"));
     connect(codeEditor, SIGNAL(copyAvailable(bool)), cutAction, SLOT(setEnabled(bool)));
@@ -92,7 +92,7 @@ void CodeSegment::setupEditingToolbar()
     // Copy
     copyAction = new QAction(QIcon(":/unit_playing/buttons/copy.svg"), tr("&Copy"), this);
     copyAction->setObjectName("copy");
-    copyAction->setEnabled(true);
+    copyAction->setEnabled(false);
     copyAction->setShortcut(QKeySequence("Ctrl+C"));
     copyAction->setStatusTip(tr("Copies the selection to the clipboard"));
     connect(codeEditor, SIGNAL(copyAvailable(bool)), copyAction, SLOT(setEnabled(bool)));
@@ -102,7 +102,7 @@ void CodeSegment::setupEditingToolbar()
     // Paste
     pasteAction = new QAction(QIcon(":/unit_playing/buttons/paste.svg"), tr("&Paste"), this);
     pasteAction->setObjectName("paste");
-    pasteAction->setEnabled(true);
+    pasteAction->setEnabled(false);
     pasteAction->setShortcut(QKeySequence("Ctrl+V"));
     pasteAction->setStatusTip(tr("Pastes the clipboard contents over the selection"));
     connect(pasteAction, SIGNAL(triggered()), codeEditor, SLOT(paste()));
