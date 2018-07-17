@@ -57,7 +57,5 @@ HEADERS += \
     source/CodeSegment/CodeSegment.h
 
 
-RESOURCES += \
-        assets/assets.qrc \
 
 
