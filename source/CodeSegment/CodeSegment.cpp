@@ -106,6 +106,12 @@ void CodeSegment::setupEditingToolbar()
     pasteAction->setEnabled(false);
     pasteAction->setShortcut(QKeySequence("Ctrl+V"));
     pasteAction->setStatusTip(tr("Pastes the clipboard contents over the selection"));
+//    void textChanged();
+//    void undoAvailable(bool b);
+//    void redoAvailable(bool b);
+//    void copyAvailable(bool b);
+//    void selectionChanged();
+    connect(codeEditor, SIGNAL(undoAvailable(bool) ), pasteAction, SLOT(setEnabled(bool)));
     connect(pasteAction, SIGNAL(triggered()), codeEditor, SLOT(paste()));
     editToolBar->addAction(pasteAction);
 
