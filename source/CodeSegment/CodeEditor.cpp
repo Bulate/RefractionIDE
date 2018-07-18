@@ -12,8 +12,9 @@ CodeEditor::CodeEditor(QWidget* parent)
 //	, autoSaveTimer( new QTimer(this) )
     , lineNumberArea( new LineNumberArea(this) )
 {
+
     // Set the default monospaced font of the game
-    const QFont font ("Liberation Mono",13);
+    const QFont font ("Liberation Mono",10);
     setFont(font);
 
     // Make tabs the same size than 4 spaces
