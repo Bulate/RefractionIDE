@@ -25,7 +25,9 @@ In order to use Refraction IDE, open the editor, load your test cases, write you
 * The QT library installed.
 * A folder built by the user, that contains the "Solution.(c/cpp)", and the test cases using the format `input#.*` and `output#.*`. For example:
 ![Folder Example](https://i.imgur.com/8BDMZSh.jpg)
-* This software is designed to work on Linux devices.
+
+## Sources
+This project is based on the project https://github.com/citic/botNeumann
 
 ## About this project
-This software was developed as a final project for the Programming 2 class, on the University of Costa Rica, by the students: Bryan Ulate, Cristian Rodriguez and Diego Orozco, under the guide of proffesor Jeisson Hidalgo.
+This software was developed as a final project for the Programming 2 class, on the University of Costa Rica, by the students: Bryan Ulate, Cristian Rodriguez and Diego Orozco, under the guide of professor Jeisson Hidalgo.

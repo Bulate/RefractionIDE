@@ -25,6 +25,7 @@ void MainWindow::MainWindow::setUp()
 void MainWindow::addCodeSegment()
 {
     codeSegment = new CodeSegment(this);
+    connect(codeSegment, &CodeSegment::userRunOrPaused, this, &MainWindow::runSolution);
     setCentralWidget(codeSegment);
 }
 
@@ -33,6 +34,12 @@ void MainWindow::addResultDockWidget()
     resultsDockWidget = new ResultsDockWidget(this);
     addDockWidget(Qt::BottomDockWidgetArea , resultsDockWidget);
 }
+
+void MainWindow::runSolution()
+{
+
+}
+
 
 MainWindow::~MainWindow()
 {

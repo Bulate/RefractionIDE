@@ -20,13 +20,13 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
- private:
+  private:
     /// Pointers to each part of the main window
     CodeEditor * codeEditor = nullptr;
     ResultsDockWidget *resultsDockWidget = nullptr;
     CodeSegment * codeSegment = nullptr;
 
- public:
+  public:
     /// Constructor
     MainWindow(QWidget *parent = nullptr);
     /// Destructor
@@ -38,6 +38,9 @@ class MainWindow : public QMainWindow
     /// Adds the result dock widget to the window
     void addResultDockWidget();
 
+  protected slots:
+    /// Compiles and runs
+    void runSolution();
 
 };
 

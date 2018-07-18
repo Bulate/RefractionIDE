@@ -107,8 +107,10 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent* event)
     int blockNumber = block.blockNumber();
     int top = (int) blockBoundingGeometry(block).translated(contentOffset()).top();
     int bottom = top + (int) blockBoundingRect(block).height();
-//    int lineNumberAreaWidth = getLineNumberAreaWidth();
-//    int fontHeight = fontMetrics().height() - 1;
+  #ifdef BREAKPOINT_SUPPORT
+    int lineNumberAreaWidth = getLineNumberAreaWidth();
+    int fontHeight = fontMetrics().height() - 1;
+  #endif
 
     // Adjust these values by the height of the current text block in each iteration in the loop
     while (block.isValid() && top <= event->rect().bottom())
@@ -120,7 +122,9 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent* event)
             QString number = QString::number(blockNumber + 1);
             painter.setPen( QColor(Qt::gray).darker() );
             // If this line has a breakpoint, paint it
-//            paintBreakpoint(block, painter, top, lineNumberAreaWidth, fontHeight);
+          #ifdef BREAKPOINT_SUPPORT
+            paintBreakpoint(block, painter, top, lineNumberAreaWidth, fontHeight);
+          #endif
             painter.drawText(0, top, lineNumberArea->width(), fontMetrics().height(), Qt::AlignRight, number);
         }
 

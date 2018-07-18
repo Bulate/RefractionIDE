@@ -75,20 +75,20 @@ class CodeSegment : public QDockWidget
 //  void loadPlayerCodeForUnit(PlayerSolution* playerSolution, Unit* unit);
 
 //  public slots:
-////	/// Called when user selects one of the diagnostics in the tools output
-////	/// @param index The index of the selected diagnostic in the allDiagnostics list
-////	void diagnosticSelected(int index);
-////	/// Get access to the breakpoints list set by the user
-////	QList<GuiBreakpoint*> retrieveBreakpoints();
+//	/// Called when user selects one of the diagnostics in the tools output
+//	/// @param index The index of the selected diagnostic in the allDiagnostics list
+//	void diagnosticSelected(int index);
+//	/// Get access to the breakpoints list set by the user
+//	QList<GuiBreakpoint*> retrieveBreakpoints();
 //	/// Called when the visualization changes it state (stopped, starting, running, finished) to
 //	/// enable or disable visualization control buttons
-////	void onStateChanged(UnitPlayingState currentState);
-////	/// Called when the player solution has finished to compile and link
-////	void playerSolutionBuilt(CompiledProgram* playerSolutionProgram);
+//	void onStateChanged(UnitPlayingState currentState);
+//	/// Called when the player solution has finished to compile and link
+//	void playerSolutionBuilt(CompiledProgram* playerSolutionProgram);
 //	/// Called when visualization has finished in order to clear highlited lines
 //	void clearAnimation();
 //	/// Called when an execution thread was updated from GDB in order to update the highlighted line
-////	void executionThreadUpdated(ExecutionThread* executionThread, int& maxDuration);
+//	void executionThreadUpdated(ExecutionThread* executionThread, int& maxDuration);
 
  signals:
 //	/// Emitted when user presses the Run/Pause button
@@ -104,19 +104,19 @@ class CodeSegment : public QDockWidget
 
  protected:
     QAction* runOrPauseAction;
-//	/// Set up the inner main window
+    /// Set up the inner main window
     void setupInnerWidget();
-//	/// Create standard editing tool bar with undo, copy, run, debug and other actions
+    /// Create standard editing tool bar with undo, copy, run, debug and other actions
     void setupEditingToolbar();
-//	/// Create a toolbar with buttons for running, stop, step into/out
+    /// Create a toolbar with buttons for running, stop, step into/out
     void setupRunToolbar();
-//	/// Create and configure the text editor object
+    /// Create and configure the text editor object
     void setupCodeEditor();
-//	/// The Run and Pause share the same action for space constraints. This method converts the
-//	/// action in Run action
-//	/// @param name Send "Run" or "Resume"
+    /// The Run and Pause share the same action for space constraints. This method converts the
+    /// action in Run action
+    /// @param name Send "Run" or "Resume"
     void setupRunAction(const QString& name, bool enabled);
-//	/// Converts the Run/Pause action into a Pause action
+//	/// Converts the RunPause action into a Pause action
 //	void setupPauseAction(bool enabled);
 
 //  protected slots:
