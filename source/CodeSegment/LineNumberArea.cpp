@@ -1,12 +1,14 @@
 #include "LineNumberArea.h"
 #include "CodeEditor.h"
 
+// Default constructor
 LineNumberArea::LineNumberArea(CodeEditor* codeEditor)
 	: QWidget(codeEditor)
 	, codeEditor(codeEditor)
 {
 }
 
+// Destructor
 LineNumberArea::~LineNumberArea()
 {
 }

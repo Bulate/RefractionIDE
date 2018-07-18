@@ -6,22 +6,36 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    setObjectName("MainWindow"); // used to save preferences
+    setUp();
+    addCodeSegment();
+    addResultDockWidget();
+}
+
+void MainWindow::MainWindow::setUp()
+{
+    // Used to save preferences
+    setObjectName("MainWindow");
     setWindowTitle("Refraction IDE");
+
     resize(1024, 768); // affects only desktop applications
     setMinimumSize(480, 320);
-//    codeEditor = new CodeEditor(this);
+
+}
+
+void MainWindow::addCodeSegment()
+{
     codeSegment = new CodeSegment(this);
     setCentralWidget(codeSegment);
+}
 
+void MainWindow::addResultDockWidget()
+{
     resultsDockWidget = new ResultsDockWidget(this);
     addDockWidget(Qt::BottomDockWidgetArea , resultsDockWidget);
-  //  addDockWidget(Qt::TopDockWidgetArea , codeSegment);
-
-
 }
 
 MainWindow::~MainWindow()
 {
 
 }
+

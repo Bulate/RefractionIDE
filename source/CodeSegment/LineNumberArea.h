@@ -24,11 +24,11 @@ class LineNumberArea : public QWidget
 	CodeEditor* codeEditor;
 
   public:
-	/// Constructor
+    /// Constructor for the line number area
 	explicit LineNumberArea(CodeEditor* codeEditor);
 	/// Destructor
-	~LineNumberArea();
-	/// ?
+    ~LineNumberArea() override;
+    ///
 	virtual QSize sizeHint() const override;
 
   protected:

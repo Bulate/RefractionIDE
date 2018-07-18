@@ -3,17 +3,23 @@
 
 #include <QPlainTextEdit>
 
-
-
 ///Foward declarations
 class SyntaxHighlighter;
 class LineNumberArea;
 
+/**
+ * @brief The CodeEditor class
+ * that owns the code editor
+ * part, here the user is able to edit
+ * his solution, also set other things up
+ * like the code highlighter
+ */
 class CodeEditor : public QPlainTextEdit
 {
     Q_OBJECT
     Q_DISABLE_COPY(CodeEditor)
-protected:
+
+ protected:
     /// Store formatting rules for C++
     SyntaxHighlighter* highlighter;
     /// Object that paints line numbers in the left margin of the code editor
@@ -21,7 +27,7 @@ protected:
     /// Overrided in order to adjust size of the line number area when the code editor is resize
     virtual void resizeEvent(QResizeEvent* event) override;
 
-public:
+ public:
     /// Constructor
     explicit CodeEditor(QWidget* parent = nullptr);
     /// Calculate the width in pixels required by the line number area. The width depends on the
@@ -32,7 +38,7 @@ public:
     void lineNumberAreaPaintEvent(QPaintEvent* event);
 
 
-protected slots:
+ protected slots:
     /// Make the left margin of the text editor bigger, in order to have space to the line number
     /// area widget
     void updateLineNumberAreaWidth();
@@ -42,7 +48,6 @@ protected slots:
     /// @param rect The part of the editing area that is do be updated (redrawn).
     /// @param dy holds the number of pixels the view has been scrolled vertically.
     void updateLineNumberArea(const QRect& rect, int dy);
-
 };
 
 #endif // CODEEDITOR_H

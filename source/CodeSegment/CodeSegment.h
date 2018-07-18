@@ -19,9 +19,6 @@ class QSlider;
 /**
     @brief Represents the data segment for the current unit.
 
-    In order to solve the unit's problem, the current player may create several source files
-    (e.g: main.cpp, MyClass.h, MyClass.cpp). These files are stored in a subfolder for the player
-
     The data segment (this class) lists all the source files that compound the current's player
     solution, and let him/her to switch between them. The CodeEditor object is able to show and
     edit only one of these files at time. Therefore, this class deals with some source files at
@@ -37,7 +34,7 @@ class CodeSegment : public QDockWidget
     QMainWindow* innerMainWindow;
     /// Object where the actual source code is shown and edited
     CodeEditor* codeEditor = nullptr;
-//	/// Manages the list of source files that compound the player's solution to an unit
+// /// Manages the list of source files that compound the player's solution to an unit
 //	PlayerSolution* playerSolution = nullptr;
 
   protected: // Edit toolbar
@@ -70,12 +67,12 @@ class CodeSegment : public QDockWidget
     /// Constructor
     explicit CodeSegment(QWidget *parent = nullptr, Qt::WindowFlags flags = 0);
     /// Destructor
-//    virtual ~CodeSegment();
+//  virtual ~CodeSegment();
     /// Get access to the code editor
 //	inline CodeEditor* getCodeEditor() const { return codeEditor; }
     /// Restores the last code made by player for the given unit, or the default unit's code if
     /// player nas not played this unit
-//    void loadPlayerCodeForUnit(PlayerSolution* playerSolution, Unit* unit);
+//  void loadPlayerCodeForUnit(PlayerSolution* playerSolution, Unit* unit);
 
 //  public slots:
 ////	/// Called when user selects one of the diagnostics in the tools output
@@ -103,7 +100,7 @@ class CodeSegment : public QDockWidget
 //	/// Emited when user presses over a breakpoint symbol in any code editor window in order to
 //	/// remove the breakpoint. Visualization controller requires this signal in order to clear
 //	/// the breakpont in debugger when visualization is running.
-////	void breakpointAction(GuiBreakpoint* guiBreakpoint);  NO SE USA
+//  void breakpointAction(GuiBreakpoint* guiBreakpoint);  NO SE USA
 
  protected:
     QAction* runOrPauseAction;

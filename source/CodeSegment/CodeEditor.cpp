@@ -2,9 +2,7 @@
 #include "SyntaxHighlighter.h"
 #include "LineNumberArea.h"
 #include "Common.h"
-
 #include <QPainter>
-
 
 // A tab is visualized as 4 space characters
 const int tabStop = 4; // characters

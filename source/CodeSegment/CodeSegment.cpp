@@ -118,6 +118,12 @@ void CodeSegment::setupEditingToolbar()
    // setWidget(editToolBar);
 
 }
+
+void userRunOrPaused()
+{
+    std::cout << "Hola mundo";
+    std::cout << "asdasd";
+}
 void CodeSegment::setupRunToolbar()
 {
     // Create the toolbar
