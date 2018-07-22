@@ -1,5 +1,5 @@
-#ifndef PLAYERSOLUTION_H
-#define PLAYERSOLUTION_H
+#ifndef USERSOLUTION_H
+#define USERSOLUTION_H
 
 #include <QObject>
 

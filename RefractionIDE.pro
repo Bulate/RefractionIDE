@@ -42,7 +42,7 @@ SOURCES += \
     source/MainWindow.cpp \
     source/RefractionIDE.cpp \
     source/CodeSegment/CodeSegment.cpp \
-    PlayerSolution.cpp
+    UserSolution.cpp
 
 
 HEADERS += \
@@ -55,7 +55,7 @@ HEADERS += \
     source/MainWindow.h \
     source/RefractionIDE.h \
     source/CodeSegment/CodeSegment.h \
-    PlayerSolution.h
+    UserSolution.h
 
 RESOURCES += \
     assets/assets.qrc

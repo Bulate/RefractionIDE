@@ -17,6 +17,7 @@
 #include <QSlider>
 #include <QToolBar>
 #include <QFileDialog>
+#include <string>
 
 // Default width and height of the tools in toolbars
 const int toolBarIconSize = 18;
@@ -248,9 +249,12 @@ void CodeSegment::setupRunAction(const QString& name, bool enabled)
 
 void CodeSegment::openFolderTriggered()
 {
-    // Send parent to new dialog
-    QFileDialog dialog(this);
-    dialog.exec();
+	// Send parent to new dialog
+	//	QFileDialog dialog(this);
+	//	dialog.setFileMode(QFileDialog::Directory);
+	//	dialog.exec();
+
+	QDir workingDirectory = QFileDialog::getExistingDirectory(0, ("Select Output Folder"), QDir::currentPath());
 }
 
 //void CodeSegment::fileSelectorIndexChanged(const QString& text)
