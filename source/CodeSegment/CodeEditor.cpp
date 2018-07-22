@@ -2,15 +2,24 @@
 #include "SyntaxHighlighter.h"
 #include "LineNumberArea.h"
 #include "Common.h"
-#include <QPainter>
+
+
+#include <QDir>
 #include <QFile>
+#include <QPainter>
+#include <QTimer>
+
 
 // A tab is visualized as 4 space characters
 const int tabStop = 4; // characters
 
+// After a change is made to the document, CodeEditor waits this amount of miliseconds, and then
+// autosaves and autocompiles the source code
+const int autoSaveWait = 2500; // milliseconds
+
 CodeEditor::CodeEditor(QWidget* parent)
     : QPlainTextEdit(parent)
-//	, autoSaveTimer( new QTimer(this) )
+	, autoSaveTimer( new QTimer(this) )
     , lineNumberArea( new LineNumberArea(this) )
 {
 
@@ -25,10 +34,10 @@ CodeEditor::CodeEditor(QWidget* parent)
     // Create the object that will provide color to C++ code within the editor
     highlighter = new SyntaxHighlighter( document() );
 
-//	// The idle timer always work in single shot basics
-//	autoSaveTimer->setSingleShot(true);
-//	autoSaveTimer->setInterval(autoSaveWait);
-//	connect(autoSaveTimer, SIGNAL(timeout()), this, SLOT(saveChanges()));
+	// The idle timer always work in single shot basics
+	autoSaveTimer->setSingleShot(true);
+	autoSaveTimer->setInterval(autoSaveWait);
+	connect(autoSaveTimer, SIGNAL(timeout()), this, SLOT(saveChanges()));
 
     // When user changes the number of lines on the editor, adjust the area of the line number
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth()));
@@ -66,6 +75,7 @@ void CodeEditor::resizeEvent(QResizeEvent* event)
     lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), getLineNumberAreaWidth(), cr.height()));
 }
 
+
 bool CodeEditor::loadFileContents(QFile* file)
 {
 	// Read all contents from the file into a sequence of bytes, then, convert the sequence of
@@ -79,8 +89,63 @@ bool CodeEditor::loadFileContents(QFile* file)
 	document()->setModified(false); // ToDo AVERIGUAR QUÉ HACE
 //     Each time the document is changed, update the pending time to autosave/autocompile
 //	connect(document(), SIGNAL(contentsChanged()), this, SLOT(documentChanged()));
+
+
 	return true;
 }
+
+
+void CodeEditor::documentChanged()
+{
+	autoSaveTimer->start();
+}
+
+bool CodeEditor::saveChanges()
+{
+	return document()->isModified() ? save() : true;
+}
+
+bool CodeEditor::save()
+{
+	// If there is not file, ignore the call
+	if ( filepath.isEmpty() ) return false;
+
+	// If the directory where the file will be stored does not exist, create it
+	QFileInfo fileInfo(filepath);
+	QDir dir = fileInfo.absoluteDir();
+	if ( ! dir.exists() )
+		if ( ! dir.mkpath(".") )
+		{
+//			qCritical(logEditor) << "Could not create directory:" << dir.absolutePath();
+			return false;
+		}
+
+	// ToDo: dot not save if there are not changes, that is, document is not modified
+	QFile file(filepath);
+
+	// Open the target file for writing text considering line changes format
+	if ( ! file.open(QIODevice::WriteOnly | QIODevice::Text) )
+	{
+//		qCritical(logEditor) << "Could not open file for writing:" << filepath;
+		return false;
+	}
+
+	// Save the current text from textEdit to a text file with UTF-8 codification
+	if ( file.write( toPlainText().toUtf8() ) == -1 )
+	{
+//		qCritical(logEditor) << "Could not write file:" << filepath;
+		return false;
+	}
+
+	// Document was successfully saved, no changes are left
+	document()->setModified(false);
+
+	// If there is a pending autosave operation, cancel it
+	autoSaveTimer->stop();
+//	qCInfo(logEditor) << "File saved:" << filepath;
+	return true;
+}
+
 
 void CodeEditor::updateLineNumberArea(const QRect& rect, int dy)
 {

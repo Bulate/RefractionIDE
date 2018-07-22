@@ -18,6 +18,8 @@ class QDir;
 class PlayerSolution;
 //class Unit;
 
+class QMenu;
+
 /**
     @brief Represents the data segment for the current unit.
 
@@ -51,9 +53,19 @@ class CodeSegment : public QDockWidget
     /// Copies the current selection in the text editor and places a copy into the clipboard
     QAction* copyAction;
     /// Paste a copy of the clipboard contents over the current selection in the text editor
-    QAction* pasteAction;
+	QAction* pasteAction;
+	QAction* saveAction;
+
+
+
+	QMenu *fileMenu;
 //    /// Let player change the file to be edited, if the solution is compound of several files
 //    QComboBox* fileSelector;
+
+  protected: // run menu options
+	void createActions();
+	void createMenus();
+
 
   protected: // Run toolbar
     /// Executes and animates the code or pauses it if already running
@@ -69,7 +81,7 @@ class CodeSegment : public QDockWidget
     /// Constructor
     explicit CodeSegment(QWidget *parent = nullptr, Qt::WindowFlags flags = 0);
     /// Destructor
-//  virtual ~CodeSegment();
+  virtual ~CodeSegment();
     /// Get access to the code editor
 //	inline CodeEditor* getCodeEditor() const { return codeEditor; }
     /// Restores the last code made by player for the given unit, or the default unit's code if

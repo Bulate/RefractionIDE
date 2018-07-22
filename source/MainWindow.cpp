@@ -2,6 +2,8 @@
 #include "CodeEditor.h"
 #include "CodeSegment.h"
 #include "ResultsDockWidget.h"
+#include <QLabel>
+#include <QVBoxLayout>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -9,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
     setUp();
     addCodeSegment();
     addResultDockWidget();
+	addMenuFile();
 }
 
 void MainWindow::MainWindow::setUp()
@@ -18,7 +21,7 @@ void MainWindow::MainWindow::setUp()
     setWindowTitle("Refraction IDE");
 
     resize(1024, 768); // affects only desktop applications
-    setMinimumSize(480, 320);
+	setMinimumSize(480, 320);
 
 }
 
@@ -42,27 +45,32 @@ void MainWindow::runSolution()
 
 void MainWindow::addMenuFile()
 {
-	QWidget *widget = new QWidget;
-	setCentralWidget(widget);
-
 	QWidget *topFiller = new QWidget;
 	topFiller->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-//	infoLabel = new QLabel(tr("<i>Choose a menu option, or right-click to "
-//							  "invoke a context menu</i>"));
-//	infoLabel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-//	infoLabel->setAlignment(Qt::AlignCenter);
+	infoLabel = new QLabel(tr("<i>Choose a menu option, or right-click to "
+							  "invoke a context menu</i>"));
+	infoLabel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+	infoLabel->setAlignment(Qt::AlignCenter);
 
 	QWidget *bottomFiller = new QWidget;
 	bottomFiller->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-//	QVBoxLayout *layout = new QVBoxLayout;
-//	layout->setMargin(5);
-//	layout->addWidget(topFiller);
-//	layout->addWidget(infoLabel);
-//	layout->addWidget(bottomFiller);
-//	widget->setLayout(layout);
+	QVBoxLayout *layout = new QVBoxLayout;
+	layout->setMargin(5);
+	layout->addWidget(topFiller);
+	layout->addWidget(infoLabel);
+	layout->addWidget(bottomFiller);
+	setLayout(layout);
+
 }
+void MainWindow::createActions()
+{
+
+}
+void MainWindow::createMenus()
+{}
+
 
 MainWindow::~MainWindow()
 {

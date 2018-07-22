@@ -23,7 +23,7 @@
 const int toolBarIconSize = 18;
 
 CodeSegment::CodeSegment(QWidget *parent, Qt::WindowFlags flags)
-    : QDockWidget(tr("Program Options"), parent, flags)
+	: QDockWidget(tr("Program Options"), parent, flags)
     , innerMainWindow( new QMainWindow(this) )
 {
     setObjectName("codeSegment");
@@ -35,10 +35,10 @@ CodeSegment::CodeSegment(QWidget *parent, Qt::WindowFlags flags)
     setupRunToolbar();
 }
 
-//CodeSegment::~CodeSegment()
-//{
-//}
-///*
+CodeSegment::~CodeSegment()
+{
+}
+
 void CodeSegment::setupInnerWidget()
 {
     // Ask the main window to behave as normal widget, instead of a real main window
@@ -62,8 +62,19 @@ void CodeSegment::setupEditingToolbar()
     connect(openFolderAction, SIGNAL(triggered()), this, SLOT(openFolderTriggered()));
     editToolBar->addAction(openFolderAction);
 
+
+	// Save file in the solution
+	saveAction = new QAction(QIcon(":/unit_playing/buttons/save.svg"), tr("&Save File"), this);
+	saveAction->setObjectName("save");
+	saveAction->setShortcut(QKeySequence("Ctrl+S"));
+	saveAction->setStatusTip(tr("save file"));
+	connect(codeEditor, SIGNAL(undoAvailable(bool)), saveAction, SLOT(setEnabled(bool)));
+	connect(saveAction, SIGNAL(triggered()), codeEditor, SLOT(save()));
+	editToolBar->addAction(saveAction);
+
+
     // Undo
-    undoAction = new QAction(QIcon(":/unit_playing/buttons/undo.svg"), tr("&Undo"), this);
+	undoAction = new QAction(QIcon(":/unit_playing/buttons/undo.svg"), tr("&Undo"), this);
     undoAction->setObjectName("undo");
     undoAction->setEnabled(false);
     undoAction->setShortcut(QKeySequence("Ctrl+Z"));
@@ -108,11 +119,7 @@ void CodeSegment::setupEditingToolbar()
     pasteAction->setEnabled(false);
     pasteAction->setShortcut(QKeySequence("Ctrl+V"));
     pasteAction->setStatusTip(tr("Pastes the clipboard contents over the selection"));
-//    void textChanged();
-//    void undoAvailable(bool b);
-//    void redoAvailable(bool b);
-//    void copyAvailable(bool b);
-//    void selectionChanged();
+
     connect(codeEditor, SIGNAL(undoAvailable(bool) ), pasteAction, SLOT(setEnabled(bool)));
     connect(pasteAction, SIGNAL(triggered()), codeEditor, SLOT(paste()));
     editToolBar->addAction(pasteAction);
@@ -126,6 +133,7 @@ void CodeSegment::setupEditingToolbar()
    // setWidget(editToolBar);
 
 }
+
 
 void CodeSegment::setupRunToolbar()
 {
@@ -261,13 +269,23 @@ QFile* CodeSegment::createSolutionFile(QDir& workingDirectory)
 {
 	// Try for .cpp
 	QFile* tempSolution = new QFile(workingDirectory.filePath("solution.cpp"));
+	QString* tempPath = new QString(workingDirectory.filePath("solution.cpp"));
 	if(tempSolution->exists())
+	{
+		codeEditor->filepath = *tempPath;
 		return tempSolution;
-	tempSolution = new QFile(workingDirectory.filePath("solution.c"));
-	if(tempSolution->exists())
-		return tempSolution;
-	return new QFile();
+	}
 
+
+	// try for .c
+	tempSolution = new QFile(workingDirectory.filePath("solution.c"));
+	tempPath = new QString(workingDirectory.filePath("solution.c"));
+	if(tempSolution->exists())
+	{
+		codeEditor->filepath = *tempPath;
+		return tempSolution;
+	}
+	return new QFile();
 }
 
 //void CodeSegment::fileSelectorIndexChanged(const QString& text)

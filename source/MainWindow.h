@@ -7,7 +7,7 @@
 class CodeEditor;
 class CodeSegment;
 class ResultsDockWidget;
-
+class QLabel;
 /**
  * @brief The MainWindow class
  * manages the main view of the user
@@ -25,7 +25,7 @@ class MainWindow : public QMainWindow
     CodeEditor * codeEditor = nullptr;
     ResultsDockWidget *resultsDockWidget = nullptr;
     CodeSegment * codeSegment = nullptr;
-
+	QLabel *infoLabel;
   public:
     /// Constructor
     MainWindow(QWidget *parent = nullptr);
@@ -40,9 +40,14 @@ class MainWindow : public QMainWindow
 
 	void addMenuFile();
 
+	void createActions();
+	void createMenus();
+
   protected slots:
     /// Compiles and runs
     void runSolution();
+
+
 
 };
 
