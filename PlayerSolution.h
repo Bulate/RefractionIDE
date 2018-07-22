@@ -1,12 +1,15 @@
-#ifndef USERSOLUTION_H
-#define USERSOLUTION_H
+#ifndef PLAYERSOLUTION_H
+#define PLAYERSOLUTION_H
 
 #include <QObject>
+
+
+class QFile;
 
 class PlayerSolution : public QObject
 {
     Q_OBJECT
-    Q_DISABLE_COPY(PlayerSolution)
+	Q_DISABLE_COPY(PlayerSolution)
 
   protected:
     /// The number of available test cases for this player solution
@@ -16,6 +19,12 @@ class PlayerSolution : public QObject
     /// @a allBuilt() signal
     int builtSteps = -1;
     /// Manages the process of building the executable from player solution's source code
+	/// This file contains the solution provided by the user
+	QFile* userSolution;
+	/// Stores the test cases
+	QList<QFile*> testCases;
+
+
 //    CompiledProgram* playerSolutionProgram = nullptr;
 //    /// The executable from a random selected Unit's solution
 //    CompiledProgram* unitSolutionProgram = nullptr;
@@ -24,8 +33,8 @@ class PlayerSolution : public QObject
 
 
   public:
-    explicit PlayerSolution(QObject *parent = nullptr);
-
+	explicit PlayerSolution(QObject *parent = nullptr);
+	void addSolutionFile(QFile* value);
 
 signals:
 

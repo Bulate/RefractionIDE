@@ -6,7 +6,7 @@
 //#include "Diagnostic.h"
 //#include "ExecutionThread.h"
 //#include "LogManager.h"
-//#include "PlayerSolution.h"
+#include "PlayerSolution.h"
 //#include "Unit.h"
 //#include "VisualizationContext.h"
 //#include "VisualizationSpeed.h"
@@ -250,11 +250,24 @@ void CodeSegment::setupRunAction(const QString& name, bool enabled)
 void CodeSegment::openFolderTriggered()
 {
 	// Send parent to new dialog
-	//	QFileDialog dialog(this);
-	//	dialog.setFileMode(QFileDialog::Directory);
-	//	dialog.exec();
-
 	QDir workingDirectory = QFileDialog::getExistingDirectory(0, ("Select Output Folder"), QDir::currentPath());
+	QFile* tempSolution = createSolutionFile(workingDirectory);
+	this->playerSolution = new PlayerSolution(this);
+	this->playerSolution->addSolutionFile(tempSolution);
+	this->codeEditor->loadFileContents(tempSolution);
+}
+
+QFile* CodeSegment::createSolutionFile(QDir& workingDirectory)
+{
+	// Try for .cpp
+	QFile* tempSolution = new QFile(workingDirectory.filePath("solution.cpp"));
+	if(tempSolution->exists())
+		return tempSolution;
+	tempSolution = new QFile(workingDirectory.filePath("solution.c"));
+	if(tempSolution->exists())
+		return tempSolution;
+	return new QFile();
+
 }
 
 //void CodeSegment::fileSelectorIndexChanged(const QString& text)

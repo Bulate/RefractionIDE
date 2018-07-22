@@ -8,12 +8,14 @@ class CodeEditor;
 //class Compiler;
 //class CompiledProgram;
 //class ExecutionThread;
+class QFile;
 class QAction;
 class QComboBox;
 class QMainWindow;
 class QSlider;
+class QDir;
 //class Player;
-//class PlayerSolution;
+class PlayerSolution;
 //class Unit;
 
 /**
@@ -35,7 +37,7 @@ class CodeSegment : public QDockWidget
     /// Object where the actual source code is shown and edited
     CodeEditor* codeEditor = nullptr;
 // /// Manages the list of source files that compound the player's solution to an unit
-//	PlayerSolution* playerSolution = nullptr;
+	PlayerSolution* playerSolution = nullptr;
 
   protected: // Edit toolbar
 	/// Create new files in the solution: header file, source file and C++ classes
@@ -50,8 +52,8 @@ class CodeSegment : public QDockWidget
     QAction* copyAction;
     /// Paste a copy of the clipboard contents over the current selection in the text editor
     QAction* pasteAction;
-    /// Let player change the file to be edited, if the solution is compound of several files
-    QComboBox* fileSelector;
+//    /// Let player change the file to be edited, if the solution is compound of several files
+//    QComboBox* fileSelector;
 
   protected: // Run toolbar
     /// Executes and animates the code or pauses it if already running
@@ -118,6 +120,8 @@ class CodeSegment : public QDockWidget
     void setupRunAction(const QString& name, bool enabled);
 //	/// Converts the RunPause action into a Pause action
 //	void setupPauseAction(bool enabled);
+	//
+	QFile* createSolutionFile(QDir& workingDirectory);
 
   protected slots:
     /// Called when the user calls to open a new folder to work with the editor.

@@ -38,6 +38,8 @@ class MainWindow : public QMainWindow
     /// Adds the result dock widget to the window
     void addResultDockWidget();
 
+	void addMenuFile();
+
   protected slots:
     /// Compiles and runs
     void runSolution();

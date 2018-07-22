@@ -6,6 +6,7 @@
 ///Foward declarations
 class SyntaxHighlighter;
 class LineNumberArea;
+class QFile;
 
 /**
  * @brief The CodeEditor class
@@ -36,6 +37,7 @@ class CodeEditor : public QPlainTextEdit
     /// When the line number area object must be painted, this method is called
     /// @remarks LineNumberArea class calls this method
     void lineNumberAreaPaintEvent(QPaintEvent* event);
+	bool loadFileContents(QFile* file);
 
 
  protected slots:

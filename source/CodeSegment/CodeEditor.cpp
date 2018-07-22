@@ -3,6 +3,7 @@
 #include "LineNumberArea.h"
 #include "Common.h"
 #include <QPainter>
+#include <QFile>
 
 // A tab is visualized as 4 space characters
 const int tabStop = 4; // characters
@@ -65,6 +66,21 @@ void CodeEditor::resizeEvent(QResizeEvent* event)
     lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), getLineNumberAreaWidth(), cr.height()));
 }
 
+bool CodeEditor::loadFileContents(QFile* file)
+{
+	// Read all contents from the file into a sequence of bytes, then, convert the sequence of
+	// bytes into a QString object assuming the UTF-8 character encoding (the default for this game)
+
+	if ( file->open(QFile::ReadOnly) )
+	{
+		setPlainText(file->readAll());
+	}
+
+	document()->setModified(false); // ToDo AVERIGUAR QUÉ HACE
+//     Each time the document is changed, update the pending time to autosave/autocompile
+//	connect(document(), SIGNAL(contentsChanged()), this, SLOT(documentChanged()));
+	return true;
+}
 
 void CodeEditor::updateLineNumberArea(const QRect& rect, int dy)
 {
