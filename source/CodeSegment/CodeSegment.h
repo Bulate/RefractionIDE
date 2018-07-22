@@ -1,4 +1,4 @@
-#ifndef CODESEGMENT_H
+﻿#ifndef CODESEGMENT_H
 #define CODESEGMENT_H
 
 
@@ -39,7 +39,7 @@ class CodeSegment : public QDockWidget
 
   protected: // Edit toolbar
 	/// Create new files in the solution: header file, source file and C++ classes
-	QAction* newFileAction;
+    QAction* openFolderAction;
     /// Undoes the last action done in the editor
     QAction* undoAction;
     /// Redoes the last undone action in the editor
@@ -119,10 +119,9 @@ class CodeSegment : public QDockWidget
 //	/// Converts the RunPause action into a Pause action
 //	void setupPauseAction(bool enabled);
 
-//  protected slots:
-//	/// Called when a new file should be added to the solution: a new header file, or
-//	/// source file, or C++ class
-//	void newFileTriggered();
+  protected slots:
+    /// Called when the user calls to open a new folder to work with the editor.
+    void openFolderTriggered();
 //	/// Called when player selects another source file in the file selector combo box
 //	void fileSelectorIndexChanged(const QString& text);
 //	/// Called when the visualization speed is changed by user

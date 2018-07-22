@@ -1,4 +1,4 @@
-#include "CodeEditor.h"
+﻿#include "CodeEditor.h"
 #include "CodeSegment.h"
 #include <iostream>
 // #include "CompiledProgram.h"     IMPORTANTE HACER LA IMPLEMENTACION
@@ -16,6 +16,7 @@
 #include <QMainWindow>
 #include <QSlider>
 #include <QToolBar>
+#include <QFileDialog>
 
 // Default width and height of the tools in toolbars
 const int toolBarIconSize = 18;
@@ -52,13 +53,13 @@ void CodeSegment::setupEditingToolbar()
     QToolBar* editToolBar = innerMainWindow->addToolBar(tr("Edit"));
     editToolBar->setIconSize( QSize(toolBarIconSize, toolBarIconSize) );
 
-	// Create new files in the solution
-	newFileAction = new QAction(QIcon(":/unit_playing/buttons/new_file.svg"), tr("&New file"), this);
-	newFileAction->setObjectName("newFile");
-	newFileAction->setShortcut(QKeySequence("Ctrl+N"));
-	newFileAction->setStatusTip(tr("Adds a new file to the solution"));
-	connect(newFileAction, SIGNAL(triggered()), this, SLOT(newFileTriggered()));
-	editToolBar->addAction(newFileAction);
+    // Opens a new file in the solution
+    openFolderAction = new QAction(QIcon(":/unit_playing/buttons/new_file.svg"), tr("&Open Folder"), this);
+    openFolderAction->setObjectName("openFolder");
+    openFolderAction->setShortcut(QKeySequence("Ctrl+O"));
+    openFolderAction->setStatusTip(tr("Opens a folder to work with the editor"));
+    connect(openFolderAction, SIGNAL(triggered()), this, SLOT(openFolderTriggered()));
+    editToolBar->addAction(openFolderAction);
 
     // Undo
     undoAction = new QAction(QIcon(":/unit_playing/buttons/undo.svg"), tr("&Undo"), this);
@@ -232,7 +233,7 @@ void CodeSegment::setupRunAction(const QString& name, bool enabled)
 ////	runOrPauseAction->setEnabled(true);
 ////}
 
-////void CodeSegment::playerSolutionBuilt(CompiledProgram* playerSolutionProgram)
+////void CodeSegment::playerSolutionBuilt(CompilednewFileTriggeredProgram* playerSolutionProgram)
 ////{
 ////	// ToDo: if there were compiling or linking errors, mark the lines
 
@@ -245,10 +246,12 @@ void CodeSegment::setupRunAction(const QString& name, bool enabled)
 ////	}
 ////}
 
-//void CodeSegment::newFileTriggered()
-//{
-//	qCDebug(logNotImplemented) << "New file triggered";
-//}
+void CodeSegment::openFolderTriggered()
+{
+    // Send parent to new dialog
+    QFileDialog dialog(this);
+    dialog.exec();
+}
 
 //void CodeSegment::fileSelectorIndexChanged(const QString& text)
 //{
