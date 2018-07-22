@@ -52,13 +52,13 @@ void CodeSegment::setupEditingToolbar()
     QToolBar* editToolBar = innerMainWindow->addToolBar(tr("Edit"));
     editToolBar->setIconSize( QSize(toolBarIconSize, toolBarIconSize) );
 
-//    // Create new files in the solution
-//    newFileAction = new QAction(QIcon(":/unit_playing/buttons/new_file.svg"), tr("&New file"), this);
-//    newFileAction->setObjectName("newFile");
-//    newFileAction->setShortcut(QKeySequence("Ctrl+N"));
-//    newFileAction->setStatusTip(tr("Adds a new file to the solution"));
-//    connect(newFileAction, SIGNAL(triggered()), this, SLOT(newFileTriggered()));
-//    editToolBar->addAction(newFileAction);
+	// Create new files in the solution
+	newFileAction = new QAction(QIcon(":/unit_playing/buttons/new_file.svg"), tr("&New file"), this);
+	newFileAction->setObjectName("newFile");
+	newFileAction->setShortcut(QKeySequence("Ctrl+N"));
+	newFileAction->setStatusTip(tr("Adds a new file to the solution"));
+	connect(newFileAction, SIGNAL(triggered()), this, SLOT(newFileTriggered()));
+	editToolBar->addAction(newFileAction);
 
     // Undo
     undoAction = new QAction(QIcon(":/unit_playing/buttons/undo.svg"), tr("&Undo"), this);
@@ -245,16 +245,16 @@ void CodeSegment::setupRunAction(const QString& name, bool enabled)
 ////	}
 ////}
 
-////void CodeSegment::newFileTriggered()
-////{
-////	qCDebug(logNotImplemented) << "New file triggered";
-////}
+//void CodeSegment::newFileTriggered()
+//{
+//	qCDebug(logNotImplemented) << "New file triggered";
+//}
 
-////void CodeSegment::fileSelectorIndexChanged(const QString& text)
-////{
-////	// Get the full path to the filename and load it in the code editor
-////	codeEditor->loadFile( playerSolution->getPlayerUnitSourcePath(text) );
-////}
+//void CodeSegment::fileSelectorIndexChanged(const QString& text)
+//{
+//	// Get the full path to the filename and load it in the code editor
+//	codeEditor->loadFile( playerSolution->getPlayerUnitSourcePath(text) );
+//}
 
 ////void CodeSegment::visualizationSpeedChanged(int speed)
 ////{

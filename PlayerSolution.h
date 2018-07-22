@@ -16,11 +16,11 @@ class PlayerSolution : public QObject
     /// @a allBuilt() signal
     int builtSteps = -1;
     /// Manages the process of building the executable from player solution's source code
-    CompiledProgram* playerSolutionProgram = nullptr;
-    /// The executable from a random selected Unit's solution
-    CompiledProgram* unitSolutionProgram = nullptr;
-    /// Object that generates the bn_tags.txt file with symbols extracted from source files
-    CtagsCall* ctagsCall = nullptr;
+//    CompiledProgram* playerSolutionProgram = nullptr;
+//    /// The executable from a random selected Unit's solution
+//    CompiledProgram* unitSolutionProgram = nullptr;
+//    /// Object that generates the bn_tags.txt file with symbols extracted from source files
+//    CtagsCall* ctagsCall = nullptr;
 
 
   public:

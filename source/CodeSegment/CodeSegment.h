@@ -38,8 +38,8 @@ class CodeSegment : public QDockWidget
 //	PlayerSolution* playerSolution = nullptr;
 
   protected: // Edit toolbar
-//    /// Create new files in the solution: header file, source file and C++ classes
-//    QAction* newFileAction;
+	/// Create new files in the solution: header file, source file and C++ classes
+	QAction* newFileAction;
     /// Undoes the last action done in the editor
     QAction* undoAction;
     /// Redoes the last undone action in the editor
