@@ -19,8 +19,9 @@ const int autoSaveWait = 2500; // milliseconds
 
 CodeEditor::CodeEditor(QWidget* parent)
     : QPlainTextEdit(parent)
-	, autoSaveTimer( new QTimer(this) )
     , lineNumberArea( new LineNumberArea(this) )
+    , autoSaveTimer( new QTimer(this) )
+
 {
 
     // Set the default monospaced font of the game
@@ -88,7 +89,7 @@ bool CodeEditor::loadFileContents(QFile* file)
 
 	document()->setModified(false); // ToDo AVERIGUAR QUÉ HACE
 //     Each time the document is changed, update the pending time to autosave/autocompile
-//	connect(document(), SIGNAL(contentsChanged()), this, SLOT(documentChanged()));
+    connect(document(), SIGNAL(contentsChanged()), this, SLOT(documentChanged()));
 
 
 	return true;
