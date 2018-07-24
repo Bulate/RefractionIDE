@@ -13,24 +13,24 @@ StandardInputOutputInspector::StandardInputOutputInspector(QWidget *parent)
 
 void StandardInputOutputInspector::buildInspector()
 {
+	toolBar = new QToolBar("Options");
+	toolBar->setOrientation(Qt::Vertical);
+	setStretchFactor(1, 0);
+
 	standardInputInspector = new QTextEdit();
 	standardInputInspector->setReadOnly(true);
 	standardInputInspector->setStyleSheet("background: rgb(222,222,255);");
 	addWidget(standardInputInspector);
 
-	toolBar = new QToolBar("Options");
-	toolBar->setOrientation(Qt::Vertical);
-	setStretchFactor(1, 0);
+	userOutputInspector = new QTextEdit();
+	userOutputInspector->setReadOnly(true);
+	userOutputInspector->setStyleSheet("background: rgb(150,222,255);");
+	addWidget(userOutputInspector);
 
-    userOutputInspector = new QTextEdit();
-    userOutputInspector->setReadOnly(true);
-    userOutputInspector->setStyleSheet("background: rgb(150,222,255);");
-    addWidget(userOutputInspector);
-
-    standarExpectedOutputInspector = new QTextEdit();
-    standarExpectedOutputInspector->setReadOnly(true);
-    standarExpectedOutputInspector->setStyleSheet("background: rgb(222,255,222);");
-    addWidget(standarExpectedOutputInspector);
+	standarExpectedOutputInspector = new QTextEdit();
+	standarExpectedOutputInspector->setReadOnly(true);
+	standarExpectedOutputInspector->setStyleSheet("background: rgb(222,255,222);");
+	addWidget(standarExpectedOutputInspector);
 
 
 }

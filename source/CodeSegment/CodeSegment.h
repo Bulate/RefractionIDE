@@ -130,9 +130,10 @@ class CodeSegment : public QDockWidget
     /// action in Run action
     /// @param name Send "Run" or "Resume"
     void setupRunAction(const QString& name, bool enabled);
+	///Reads test cases
+	void loadTestCases(QDir workingDirectory);
 //	/// Converts the RunPause action into a Pause action
 //	void setupPauseAction(bool enabled);
-	//
 	QFile* createSolutionFile(QDir& workingDirectory);
 
   protected slots:

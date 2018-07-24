@@ -26,6 +26,7 @@ class MainWindow : public QMainWindow
     ResultsDockWidget *resultsDockWidget = nullptr;
     CodeSegment * codeSegment = nullptr;
 	QLabel *infoLabel;
+
   public:
     /// Constructor
     MainWindow(QWidget *parent = nullptr);

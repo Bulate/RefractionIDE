@@ -263,8 +263,40 @@ void CodeSegment::openFolderTriggered()
 	this->playerSolution = new PlayerSolution(this);
 	this->playerSolution->addSolutionFile(tempSolution);
 	this->codeEditor->loadFileContents(tempSolution);
+	this->loadTestCases(workingDirectory);
 }
+void CodeSegment::loadTestCases(QDir workingDirectory)
+{
+	QFile* tempTestCaseInput ;
+	QFile* tempTestCaseOutput;
+	///  Dp while there are test cases to load
+	int count = 1;
+	do
+	{
+		QString inputName;
+		inputName.sprintf("%s%03d%s", "input", count, ".txt");
+		QString* inputPath = new QString(workingDirectory.filePath(inputName));
 
+		QString outputName;
+		outputName.sprintf("%s%03d%s", "output", count, ".txt");
+		QString* outputPath = new QString(workingDirectory.filePath(outputName));
+
+		//std::cerr<<tempPath->toStdString()
+		tempTestCaseInput = new QFile(*inputPath);
+		tempTestCaseOutput = new QFile(*outputPath);
+
+		if (tempTestCaseInput->exists() && tempTestCaseOutput->exists())
+		{
+			codeEditor->filepath = *inputPath;
+			this->playerSolution->addInput(tempTestCaseInput);
+			this->playerSolution->addOutput(tempTestCaseOutput);
+			std::cerr << "Me lei" ;
+		}
+
+		++count;
+	}
+	while (tempTestCaseInput->exists());
+}
 QFile* CodeSegment::createSolutionFile(QDir& workingDirectory)
 {
 	// Try for .cpp
@@ -275,6 +307,7 @@ QFile* CodeSegment::createSolutionFile(QDir& workingDirectory)
 		codeEditor->filepath = *tempPath;
 		return tempSolution;
 	}
+
 
 
 	// try for .c

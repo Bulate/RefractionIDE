@@ -22,8 +22,12 @@ class PlayerSolution : public QObject
 	/// This file contains the solution provided by the user
 	QFile* userSolution;
 	/// Stores the test cases
-	QList<QFile*> testCases;
+	QList<QFile*> testCaseInputs;
+	QList<QFile*> testCaseOutputs;
 
+	/// The number of available test cases for this player solution
+	/// -1 means that test cases have not been generated
+//	int testCasesCount = -1;
 
 //    CompiledProgram* playerSolutionProgram = nullptr;
 //    /// The executable from a random selected Unit's solution
@@ -35,6 +39,8 @@ class PlayerSolution : public QObject
   public:
 	explicit PlayerSolution(QObject *parent = nullptr);
 	void addSolutionFile(QFile* value);
+	void addInput(QFile* file);
+	void addOutput(QFile* file);
 
 signals:
 
