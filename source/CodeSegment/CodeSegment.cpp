@@ -24,8 +24,13 @@
 // Default width and height of the tools in toolbars
 const int toolBarIconSize = 18;
 
+QDir *CodeSegment::getWorkingDirectory() const
+{
+    return workingDirectory;
+}
+
 CodeSegment::CodeSegment(MainWindow* parent, Qt::WindowFlags flags)
-	: QDockWidget(tr("Program Options"), parent, flags)
+    : QDockWidget(tr("Program Options"), parent, flags)
 	, innerMainWindow( new QMainWindow(this))
 	, parentMainWindow(parent)
 {
@@ -261,12 +266,12 @@ void CodeSegment::setupRunAction(const QString& name, bool enabled)
 void CodeSegment::openFolderTriggered()
 {
 	// Send parent to new dialog
-	QDir workingDirectory = QFileDialog::getExistingDirectory(0, ("Select Output Folder"), QDir::currentPath());
-	QFile* tempSolution = createSolutionFile(workingDirectory);
+    this->workingDirectory = new QDir(QFileDialog::getExistingDirectory(0, ("Select Output Folder"), QDir::currentPath()));
+    QFile* tempSolution = createSolutionFile(*workingDirectory);
 	this->playerSolution = new PlayerSolution(this);
 	this->playerSolution->addSolutionFile(tempSolution);
 	this->codeEditor->loadFileContents(tempSolution);
-	this->loadTestCases(workingDirectory);
+    this->loadTestCases(*workingDirectory);
 //	connect(openFolderAction, SIGNAL(triggered()), parentMainWindow, SIGNAL(updateResultsDockWidfget())  );
 //	this->resultsDockWidget->createTestCasesTabs();
 

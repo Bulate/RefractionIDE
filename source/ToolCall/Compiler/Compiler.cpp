@@ -2,6 +2,7 @@
 #include "CompilerCall.h"
 #include "LinkerCall.h"
 #include <QStringList>
+#include <iostream>
 
 Compiler::Compiler(QObject *parent)
 	: QObject(parent)
@@ -128,8 +129,7 @@ void Compiler::linkExecutable()
 
 	// When the linker has finished its execution, get our linkerCallFinished() method called
 	connect(linkerCall, SIGNAL(finished()), this, SLOT(linkerCallFinished()) );
-
-	// Start the compilation process, and cross the fingers
+    // Start the compilation process, and cross the fingers
 	linkerCall->start();
 }
 

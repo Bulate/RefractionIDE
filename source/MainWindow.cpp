@@ -7,6 +7,7 @@
 #include <iostream>
 #include <QVBoxLayout>
 #include "ToolCall/Compiler/Compiler.h"
+#include <QDir>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -48,7 +49,8 @@ void MainWindow::addResultDockWidget()
 void MainWindow::runSolution()
 {
     const QString& filepath = this->codeSegment->getFilePath();
-    const QFileInfo* route = new QFileInfo(filepath);
+    //const QString* test = new QString("/home/b65145@ecci.ucr.ac.cr/Desktop/test/");
+    const QFileInfo* route = new QFileInfo(this->codeSegment->getWorkingDirectory()->absolutePath());
 
 
 

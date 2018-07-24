@@ -1,6 +1,7 @@
 #include "LinkerCall.h"
 #include "LinkerDiagnostic.h"
 #include "LogManager.h"
+#include <iostream>
 
 #include <QProcess>
 #include <QTextStream>
@@ -31,7 +32,7 @@ void LinkerCall::start()
 
 	// When linking process finishes, call a method of this class
 	connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processFinished()));
-
+    std::cerr << "\nHOLA MUNDO\n";
 	// Start the process
 	process->start(getCxxCompiler(), arguments);
 	qCInfo(logBuild) << process->program() << process->arguments().join(" ");

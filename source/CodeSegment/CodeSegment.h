@@ -59,6 +59,7 @@ class CodeSegment : public QDockWidget
     /// Paste a copy of the clipboard contents over the current selection in the text editor
 	QAction* pasteAction;
 	QAction* saveAction;
+    QDir* workingDirectory;
 
 
 
@@ -108,8 +109,10 @@ class CodeSegment : public QDockWidget
 //	/// Called when an execution thread was updated from GDB in order to update the highlighted line
 //	void executionThreadUpdated(ExecutionThread* executionThread, int& maxDuration);
 
- signals:
-//	/// Emitted when user presses the Run/Pause button
+    QDir *getWorkingDirectory() const;
+
+signals:
+    //	/// Emitted when user presses the Run/Pause button
     void userRunOrPaused();
 //	/// Called when the step over button is pressed
 //	void userSteppedForward();
