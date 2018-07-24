@@ -322,27 +322,21 @@ void CodeSegment::loadTestCases(QDir workingDirectory)
 }
 QFile* CodeSegment::createSolutionFile(QDir& workingDirectory)
 {
-	// Try for .cpp
-	QFile* tempSolution = new QFile(workingDirectory.filePath("solution.cpp"));
-	QString* tempPath = new QString(workingDirectory.filePath("solution.cpp"));
-	if(tempSolution->exists())
-	{
-		codeEditor->filepath = *tempPath;
-		return tempSolution;
-	}
-
-
-
-	// try for .c
-	tempSolution = new QFile(workingDirectory.filePath("solution.c"));
-	tempPath = new QString(workingDirectory.filePath("solution.c"));
-	if(tempSolution->exists())
-	{
-		codeEditor->filepath = *tempPath;
-		return tempSolution;
-	}
-	return new QFile();
+   // Try for all the supported Solution names
+    const char* const solutionNames [] = {"solution.cpp", "Solution.cpp", "solution.c", "Solution.c"};
+    for(int count = 0; count < 4; ++count)
+    {
+        QFile* tempSolution = new QFile(workingDirectory.filePath(solutionNames[count]));
+        QString* tempPath = new QString(workingDirectory.filePath(solutionNames[count]));
+        if(tempSolution->exists())
+        {
+            codeEditor->filepath = *tempPath;
+            return tempSolution;
+        }
+    }
+    return new QFile();
 }
+
 
 //void CodeSegment::fileSelectorIndexChanged(const QString& text)
 //{
