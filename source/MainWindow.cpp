@@ -59,6 +59,9 @@ void MainWindow::runSolution()
     this->compiler = new Compiler(this);
     compiler->compile(filepath, *route );
 
+//    foreach (Diagnostic* diagnostic, compiler->getAllDiagnostics() )///////////////////////////////////////////////////////////////////////////////
+//        std::cout << " " << diagnostic;
+
 }
 
 void MainWindow::updateResultsDockWidfget(int testCasesCount
