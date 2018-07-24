@@ -60,3 +60,36 @@ void ResultsDockWidget::createTestCasesTabs(int testCasesCount
 
 	 }
 }
+
+void ResultsDockWidget::appendDebuggerMessage(QtMsgType type, const QString& category, const QString& message)
+{
+    QColor color = Qt::black;
+    QIcon icon;
+
+    if ( category == "ADbR" )
+    {
+        color = Qt::black;
+        icon.addFile(":/unit_playing/buttons/monitor.svg");
+    }
+    else if ( category == "ADbC")
+    {
+        color = Qt::darkGreen;
+        icon.addFile(":/unit_playing/buttons/info.svg");
+    }
+    else
+    {
+        switch ( type )
+        {
+            case QtWarningMsg: color = Qt::magenta; icon.addFile(":/unit_playing/buttons/warning.svg"); break;
+            case QtFatalMsg:
+            case QtCriticalMsg: color = Qt::red; icon.addFile(":/unit_playing/buttons/error.svg"); break;
+            case QtDebugMsg: color = Qt::darkGray; icon.addFile(":/unit_playing/buttons/link_broken.svg"); break;
+            default: icon.addFile(":/unit_playing/buttons/info.svg"); break;
+        }
+    }
+
+    QListWidgetItem* listItem = new QListWidgetItem(icon, message, toolsOutput);
+
+    // Provide some styles
+    listItem->setForeground( color );
+}

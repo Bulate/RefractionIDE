@@ -1,7 +1,7 @@
 #ifndef COMPILERCALL_H
 #define COMPILERCALL_H
 
-#include "ToolCall.h"
+#include "ToolCall/ToolCall.h"
 
 class Diagnostic;
 

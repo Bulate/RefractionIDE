@@ -1,7 +1,7 @@
 #ifndef LINKERCALL_H
 #define LINKERCALL_H
 
-#include "ToolCall.h"
+#include "ToolCall/ToolCall.h"
 #include <QStringList>
 
 class Diagnostic;

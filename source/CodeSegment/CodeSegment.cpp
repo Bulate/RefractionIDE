@@ -274,7 +274,12 @@ void CodeSegment::openFolderTriggered()
 
 void CodeSegment::setPointerToResults(ResultsDockWidget* resultsDockWidget)
 {
-	//this->resultsDockWidget = resultsDockWidget;
+    //this->resultsDockWidget = resultsDockWidget;
+}
+
+const QString &CodeSegment::getFilePath()
+{
+    return this->codeEditor->filepath;
 }
 
 void CodeSegment::loadTestCases(QDir workingDirectory)
@@ -299,7 +304,7 @@ void CodeSegment::loadTestCases(QDir workingDirectory)
 
 		if (tempTestCaseInput->exists() && tempTestCaseOutput->exists())
 		{
-			codeEditor->filepath = *inputPath;
+            //codeEditor->filepath = *inputPath;
 			this->playerSolution->addInput(tempTestCaseInput);
 			this->playerSolution->addOutput(tempTestCaseOutput);
 //			std::cerr << "Me lei" ;

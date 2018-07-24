@@ -28,6 +28,10 @@ protected:
   /// Let user compare differences between test case's input/output/error and his/her solution
   StandardInputOutputInspector* standardInputOutputInspector = nullptr;
 
+
+public slots:
+  /// Appends a message sent by the debugger (e.g. GDB)
+  void appendDebuggerMessage(QtMsgType type, const QString& category, const QString& message);
 //  /// Let user compare differences between test case's input/output/error and his/her solution
 //  StandardInputOutpInspector* standardInputOutputInspector = nullptr;
 };

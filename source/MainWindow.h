@@ -9,7 +9,7 @@ class CodeSegment;
 class ResultsDockWidget;
 class QLabel;
 class QFile;
-
+class Compiler;
 
 /**
  * @brief The MainWindow class
@@ -28,6 +28,7 @@ class MainWindow : public QMainWindow
     CodeEditor * codeEditor = nullptr;
     ResultsDockWidget *resultsDockWidget = nullptr;
     CodeSegment * codeSegment = nullptr;
+    Compiler* compiler = nullptr;
 	QLabel *infoLabel;
 
   public:

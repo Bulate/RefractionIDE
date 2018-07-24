@@ -42,7 +42,15 @@ SOURCES += \
     source/MainWindow.cpp \
     source/RefractionIDE.cpp \
     source/CodeSegment/CodeSegment.cpp \
-    PlayerSolution.cpp
+    PlayerSolution.cpp \
+    source/ToolCall/Compiler/Compiler.cpp \
+    source/ToolCall/Compiler/CompilerCall.cpp \
+    source/ToolCall/Compiler/CompilerDiagnostic.cpp \
+    source/ToolCall/Compiler/Diagnostic.cpp \
+    source/ToolCall/Compiler/LinkerCall.cpp \
+    source/ToolCall/Compiler/LinkerDiagnostic.cpp \
+    source/Common/LogManager.cpp \
+    source/ToolCall/ToolCall.cpp
 
 
 HEADERS += \
@@ -55,7 +63,15 @@ HEADERS += \
     source/MainWindow.h \
     source/RefractionIDE.h \
     source/CodeSegment/CodeSegment.h \
-    PlayerSolution.h
+    PlayerSolution.h \
+    source/ToolCall/Compiler/Compiler.h \
+    source/ToolCall/Compiler/CompilerCall.h \
+    source/ToolCall/Compiler/CompilerDiagnostic.h \
+    source/ToolCall/Compiler/Diagnostic.h \
+    source/ToolCall/Compiler/LinkerCall.h \
+    source/ToolCall/Compiler/LinkerDiagnostic.h \
+    source/Common/LogManager.h \
+    source/ToolCall/ToolCall.h
 
 RESOURCES += \
     assets/assets.qrc

@@ -2,8 +2,11 @@
 #include "CodeEditor.h"
 #include "CodeSegment.h"
 #include "ResultsDockWidget.h"
+#include "PlayerSolution.h"
 #include <QLabel>
+#include <iostream>
 #include <QVBoxLayout>
+#include "ToolCall/Compiler/Compiler.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -44,6 +47,15 @@ void MainWindow::addResultDockWidget()
 
 void MainWindow::runSolution()
 {
+    const QString& filepath = this->codeSegment->getFilePath();
+    const QFileInfo* route = new QFileInfo(filepath);
+
+
+
+    std::cerr << "Me cai" << filepath.toStdString() << "   |    " << route->filePath().toStdString();
+
+    this->compiler = new Compiler(this);
+    compiler->compile(filepath, *route );
 
 }
 

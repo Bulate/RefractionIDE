@@ -91,8 +91,8 @@ class CodeSegment : public QDockWidget
     /// Restores the last code made by player for the given unit, or the default unit's code if
     /// player nas not played this unit
 //  void loadPlayerCodeForUnit(PlayerSolution* playerSolution, Unit* unit);
-	void setPointerToResults(ResultsDockWidget* resultsDockWidget);
-//  public slots:
+    void setPointerToResults(ResultsDockWidget* resultsDockWidget);
+    const QString& getFilePath();
 //	/// Called when user selects one of the diagnostics in the tools output
 //	/// @param index The index of the selected diagnostic in the allDiagnostics list
 //	void diagnosticSelected(int index);
