@@ -6,7 +6,7 @@
 class RefractionIDE : public QApplication
 {
  public:
-    RefractionIDE(int argc, char* argv[]);
+    RefractionIDE(int& argc , char* argv[]);
 
 
 };
