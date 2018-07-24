@@ -9,9 +9,10 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     setUp();
+	addResultDockWidget();
     addCodeSegment();
-    addResultDockWidget();
 	addMenuFile();
+
 }
 
 void MainWindow::MainWindow::setUp()
@@ -28,6 +29,9 @@ void MainWindow::MainWindow::setUp()
 void MainWindow::addCodeSegment()
 {
     codeSegment = new CodeSegment(this);
+
+	codeSegment->setPointerToResults(this->resultsDockWidget);
+
     connect(codeSegment, &CodeSegment::userRunOrPaused, this, &MainWindow::runSolution);
     setCentralWidget(codeSegment);
 }
@@ -43,25 +47,32 @@ void MainWindow::runSolution()
 
 }
 
+void MainWindow::updateResultsDockWidfget(int testCasesCount
+										  , const QList<QFile *> &testCaseInputs
+										  , const QList<QFile *> &testCaseOutputs)
+{
+	resultsDockWidget->createTestCasesTabs(testCasesCount, testCaseInputs, testCaseOutputs);
+}
+
 void MainWindow::addMenuFile()
 {
-	QWidget *topFiller = new QWidget;
-	topFiller->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+//	QWidget *topFiller = new QWidget;
+//	topFiller->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-	infoLabel = new QLabel(tr("<i>Choose a menu option, or right-click to "
-							  "invoke a context menu</i>"));
-	infoLabel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-	infoLabel->setAlignment(Qt::AlignCenter);
+//	infoLabel = new QLabel(tr("<i>Choose a menu option, or right-click to "
+//							  "invoke a context menu</i>"));
+//	infoLabel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+//	infoLabel->setAlignment(Qt::AlignCenter);
 
-	QWidget *bottomFiller = new QWidget;
-	bottomFiller->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+//	QWidget *bottomFiller = new QWidget;
+//	bottomFiller->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-	QVBoxLayout *layout = new QVBoxLayout;
-	layout->setMargin(5);
-	layout->addWidget(topFiller);
-	layout->addWidget(infoLabel);
-	layout->addWidget(bottomFiller);
-	setLayout(layout);
+//	QVBoxLayout *layout = new QVBoxLayout;
+//	layout->setMargin(5);
+//	layout->addWidget(topFiller);
+//	layout->addWidget(infoLabel);
+//	layout->addWidget(bottomFiller);
+//	setLayout(layout);
 
 }
 void MainWindow::createActions()

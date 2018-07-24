@@ -7,6 +7,7 @@
 //#include "ExecutionThread.h"
 //#include "LogManager.h"
 #include "PlayerSolution.h"
+#include "ResultsDockWidget.h"
 //#include "Unit.h"
 //#include "VisualizationContext.h"
 //#include "VisualizationSpeed.h"
@@ -18,13 +19,15 @@
 #include <QToolBar>
 #include <QFileDialog>
 #include <string>
+#include "MainWindow.h"
 
 // Default width and height of the tools in toolbars
 const int toolBarIconSize = 18;
 
-CodeSegment::CodeSegment(QWidget *parent, Qt::WindowFlags flags)
+CodeSegment::CodeSegment(MainWindow* parent, Qt::WindowFlags flags)
 	: QDockWidget(tr("Program Options"), parent, flags)
-    , innerMainWindow( new QMainWindow(this) )
+	, innerMainWindow( new QMainWindow(this))
+	, parentMainWindow(parent)
 {
     setObjectName("codeSegment");
     setFeatures(QDockWidget::NoDockWidgetFeatures);
@@ -57,7 +60,7 @@ void CodeSegment::setupEditingToolbar()
     // Opens a new file in the solution
     openFolderAction = new QAction(QIcon(":/unit_playing/buttons/new_file.svg"), tr("&Open Folder"), this);
     openFolderAction->setObjectName("openFolder");
-    openFolderAction->setShortcut(QKeySequence("Ctrl+O"));
+	openFolderAction->setShortcut(QKeySequence("Ctrl+N"));
     openFolderAction->setStatusTip(tr("Opens a folder to work with the editor"));
     connect(openFolderAction, SIGNAL(triggered()), this, SLOT(openFolderTriggered()));
     editToolBar->addAction(openFolderAction);
@@ -264,7 +267,16 @@ void CodeSegment::openFolderTriggered()
 	this->playerSolution->addSolutionFile(tempSolution);
 	this->codeEditor->loadFileContents(tempSolution);
 	this->loadTestCases(workingDirectory);
+//	connect(openFolderAction, SIGNAL(triggered()), parentMainWindow, SIGNAL(updateResultsDockWidfget())  );
+//	this->resultsDockWidget->createTestCasesTabs();
+
 }
+
+void CodeSegment::setPointerToResults(ResultsDockWidget* resultsDockWidget)
+{
+	//this->resultsDockWidget = resultsDockWidget;
+}
+
 void CodeSegment::loadTestCases(QDir workingDirectory)
 {
 	QFile* tempTestCaseInput ;
@@ -290,12 +302,18 @@ void CodeSegment::loadTestCases(QDir workingDirectory)
 			codeEditor->filepath = *inputPath;
 			this->playerSolution->addInput(tempTestCaseInput);
 			this->playerSolution->addOutput(tempTestCaseOutput);
-			std::cerr << "Me lei" ;
+//			std::cerr << "Me lei" ;
 		}
 
 		++count;
 	}
 	while (tempTestCaseInput->exists());
+
+	this->parentMainWindow->updateResultsDockWidfget(playerSolution->getTestCasesCount()
+													 , playerSolution->getTestCaseInputs()
+													 , playerSolution->getTestCaseOutputs());
+
+
 }
 QFile* CodeSegment::createSolutionFile(QDir& workingDirectory)
 {

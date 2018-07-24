@@ -8,6 +8,7 @@
 class QAction;
 class QTextEdit;
 class QToolBar;
+class QFile;
 
 class StandardInputOutputInspector : public QSplitter
 {
@@ -33,6 +34,8 @@ class StandardInputOutputInspector : public QSplitter
   public:
 	/// Constructor
 	explicit StandardInputOutputInspector(QWidget* parent = nullptr);
+	void setInput(QFile* file);
+	void setOutput(QFile* file);
 
   public slots:
 

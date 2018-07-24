@@ -8,6 +8,9 @@ class CodeEditor;
 class CodeSegment;
 class ResultsDockWidget;
 class QLabel;
+class QFile;
+
+
 /**
  * @brief The MainWindow class
  * manages the main view of the user
@@ -44,9 +47,14 @@ class MainWindow : public QMainWindow
 	void createActions();
 	void createMenus();
 
+	void updateResultsDockWidfget(int testCasesCount
+								  , const QList<QFile *>& testCaseInputs
+								  , const QList<QFile *>& testCaseOutputs);
+
   protected slots:
     /// Compiles and runs
     void runSolution();
+
 
 
 

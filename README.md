@@ -5,7 +5,7 @@
 ## General description
 Refraction is an integrated development environment (IDE), designed to work with black box testing. It allows to edit, compile, run and then compare the result of your program to input / expected output files.
 
-![Window example](https://i.imgur.com/5mazu7r.png)
+![Window example](https://i.imgur.com/jChjxRZ.png)
 
 ## Why is this needed?
 While working with test cases, automatic judges (online judges) are usually very cruel, and even a small diference such as a whitespace or a colon makes a test case fail. Using Refraction, you can visually identify **where** the error is located and fix it quickly.

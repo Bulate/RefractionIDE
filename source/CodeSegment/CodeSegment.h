@@ -13,12 +13,14 @@ class QAction;
 class QComboBox;
 class QMainWindow;
 class QSlider;
+class MainWindow;
 class QDir;
 //class Player;
 class PlayerSolution;
 //class Unit;
 
 class QMenu;
+class ResultsDockWidget;
 
 /**
     @brief Represents the data segment for the current unit.
@@ -40,6 +42,8 @@ class CodeSegment : public QDockWidget
     CodeEditor* codeEditor = nullptr;
 // /// Manages the list of source files that compound the player's solution to an unit
 	PlayerSolution* playerSolution = nullptr;
+//	ResultsDockWidget* resultsDockWidget = nullptr;
+	MainWindow* parentMainWindow;
 
   protected: // Edit toolbar
 	/// Create new files in the solution: header file, source file and C++ classes
@@ -79,7 +83,7 @@ class CodeSegment : public QDockWidget
 
   public:
     /// Constructor
-    explicit CodeSegment(QWidget *parent = nullptr, Qt::WindowFlags flags = 0);
+	explicit CodeSegment(MainWindow *parent = nullptr, Qt::WindowFlags flags = 0);
     /// Destructor
   virtual ~CodeSegment();
     /// Get access to the code editor
@@ -87,7 +91,7 @@ class CodeSegment : public QDockWidget
     /// Restores the last code made by player for the given unit, or the default unit's code if
     /// player nas not played this unit
 //  void loadPlayerCodeForUnit(PlayerSolution* playerSolution, Unit* unit);
-
+	void setPointerToResults(ResultsDockWidget* resultsDockWidget);
 //  public slots:
 //	/// Called when user selects one of the diagnostics in the tools output
 //	/// @param index The index of the selected diagnostic in the allDiagnostics list

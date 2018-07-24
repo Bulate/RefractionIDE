@@ -6,16 +6,18 @@
 
 class QFile;
 
+
+
 class PlayerSolution : public QObject
 {
     Q_OBJECT
 	Q_DISABLE_COPY(PlayerSolution)
 
   protected:
-    /// The number of available test cases for this player solution
-    /// -1 means that test cases have not been generated
-    int testCasesCount = -1;
-    /// Counts the number of steps to have the entire player solution built and emit the
+	/// The number of available test cases for this player solution
+	/// -1 means that test cases have not been generated
+	 int testCasesCount = 0;
+	/// Counts the number of steps to have the entire player solution built and emit the
     /// @a allBuilt() signal
     int builtSteps = -1;
     /// Manages the process of building the executable from player solution's source code
@@ -41,6 +43,17 @@ class PlayerSolution : public QObject
 	void addSolutionFile(QFile* value);
 	void addInput(QFile* file);
 	void addOutput(QFile* file);
+
+	int getBuiltSteps() const;
+	void setBuiltSteps(int value);
+
+	int getTestCasesCount() const;
+
+	void setTestCasesCount(int value);
+
+	QList<QFile *> getTestCaseInputs() const;
+
+	QList<QFile *> getTestCaseOutputs() const;
 
 signals:
 
