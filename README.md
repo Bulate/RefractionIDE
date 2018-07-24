@@ -21,10 +21,12 @@ In order to use Refraction IDE, open the editor, load your test cases, write you
 * In-site compilation and program running.
 
 ## Requirements
-* A C/C++ compilator installed.
+* For OSX: Clang compiler.
+* For windows or Linux: gcc compiler.
 * The QT library installed.
 * A folder built by the user, that contains the "Solution.(c/cpp)", and the test cases using the format `input#.*` and `output#.*`. For example:
 ![Folder Example](https://i.imgur.com/8BDMZSh.jpg)
+
 
 ## Sources
 This project is based on the project https://github.com/citic/botNeumann
