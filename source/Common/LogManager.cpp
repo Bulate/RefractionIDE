@@ -205,7 +205,7 @@ bool LogManager::shouldLogToGui(QtMsgType type, const QString& category)
     return category == "ADbC" || category == "ADbR";
 }
 
-void LogManager::setResultsDockWidget(ResultsDockWidget* resultsDockWidget)
+void LogManager::setMessagesArea(ResultsDockWidget* resultsDockWidget)
 {
     LogManager::resultsDockWidget = resultsDockWidget;
 }

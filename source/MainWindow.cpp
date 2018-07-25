@@ -3,6 +3,8 @@
 #include "CodeSegment.h"
 #include "ResultsDockWidget.h"
 #include "PlayerSolution.h"
+
+#include "Diagnostic.h"
 #include <QLabel>
 #include <iostream>
 #include <QVBoxLayout>
@@ -32,7 +34,7 @@ void MainWindow::MainWindow::setUp()
 
 void MainWindow::addCodeSegment()
 {
-    codeSegment = new CodeSegment(this);
+    codeSegment = new CodeSeglogErrorsment(this);
 
 	codeSegment->setPointerToResults(this->resultsDockWidget);
 
@@ -52,15 +54,13 @@ void MainWindow::runSolution()
     const QString test = this->codeSegment->getWorkingDirectory()->absolutePath() + QDir::separator() + "solution.out";
     const QFileInfo* route = new QFileInfo(test);
 
-
-
-    std::cerr << "Me cai" << filepath.toStdString() << "   |    " << route->filePath().toStdString();
+    //std::cerr << "Me cai" << filepath.toStdString() << "   |    " << route->filePath().toStdString();
 
     this->compiler = new Compiler(this);
     compiler->compile(filepath, *route );
-
-//    foreach (Diagnostic* diagnostic, compiler->getAllDiagnostics() )///////////////////////////////////////////////////////////////////////////////
-//        std::cout << " " << diagnostic;
+    connect( this, SIGNAL(buildFinished()), this, SLOT(solutionBuildFinished()) );
+    foreach (Diagnostic* diagnostic, compiler->getAllDiagnostics() )
+        std::cout << " " << diagnostic;
 
 }
 
@@ -69,6 +69,12 @@ void MainWindow::updateResultsDockWidfget(int testCasesCount
 										  , const QList<QFile *> &testCaseOutputs)
 {
 	resultsDockWidget->createTestCasesTabs(testCasesCount, testCaseInputs, testCaseOutputs);
+}
+
+
+bool MainWindow::solutionBuildFinished()
+{
+    return logErrors();
 }
 
 void MainWindow::addMenuFile()

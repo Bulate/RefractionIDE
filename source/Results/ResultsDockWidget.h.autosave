@@ -46,7 +46,7 @@ public slots:
   /// The compiler pointer is required in order to get the diagnostics. If there are errors
   /// and the messages dock widget is hidden, it is made visible and the tools output tab is
   /// made active. If there are not errors, the tools output tab is just cleared.
-  void playerSolutionBuilt(CompiledProgram* compiledProgram);
+  void playerSolutionBuilt(Compiler *compiler);
 
 signals:
   /// Emitted when user selects one of the diagnostics in the tools output

@@ -30,6 +30,7 @@ INCLUDEPATH += \
         source/CodeSegment \
         source/Results \
         assets \
+        source/ToolCall/Compiler \
 
 SOURCES += \
     source/CodeSegment/CodeEditor.cpp \

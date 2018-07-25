@@ -56,6 +56,12 @@ class MainWindow : public QMainWindow
     /// Compiles and runs
     void runSolution();
 
+signals:
+  /// Emitted when the compilation and linking process finishes
+  void buildFinished();
+  /// Called after the build process of the solution has finished. This method is only called
+  /// when @a programText is a standard generator
+  bool solutionBuildFinished();
 
 
 

@@ -60,8 +60,8 @@ class LogManager : public QObject
 	/// Builds a new file name for this device
 	/// This function is only called once on a device
 	static QString buildLogFilename(bool saveInSettings);
-    /// Called by the ResultsDockWidget to set it as a delegate
-    static void setResultsDockWidget(ResultsDockWidget* resultsDockWidget);
+    /// Called by the MessagesArea to set it as a delegate
+    static void setMessagesArea(ResultsDockWidget* messagesArea);
 
   protected:
 	/// Return true if this a very repetitive message that should be not logged
