@@ -3,6 +3,7 @@
 
 
 #include <QDockWidget>
+#include <QProcess>
 
 class CodeEditor;
 //class Compiler;
@@ -97,7 +98,7 @@ class CodeSegment : public QDockWidget
 //  void loadPlayerCodeForUnit(PlayerSolution* playerSolution, Unit* unit);
     void setPointerToResults(ResultsDockWidget* resultsDockWidget);
     const QString& getFilePath();
-    void runTestCase(QString solutionFile, QString inputfile, QString outputfile);
+	void runTestCase(QString solutionFile, QString inputfile, QString outputfile, bool isLastFile);
 //	/// Called when user selects one of the diagnostics in the tools output
 //	/// @param index The index of the selected diagnostic in the allDiagnostics list
 //	void diagnosticSelected(int index);
@@ -151,6 +152,8 @@ signals:
   protected slots:
     /// Called when the user calls to open a new folder to work with the editor.
     void openFolderTriggered();
+	/// Called when the solution has been run, to display the result on screen
+	void playerSolutionFinished(int exitCode, QProcess::ExitStatus exitStatus);
 //	/// Called when player selects another source file in the file selector combo box
 //	void fileSelectorIndexChanged(const QString& text);
 //	/// Called when the visualization speed is changed by user

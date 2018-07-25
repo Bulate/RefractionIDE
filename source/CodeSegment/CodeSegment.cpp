@@ -44,16 +44,19 @@ void CodeSegment::runTestCases()
         //std::cerr << outputFilePath.toStdString();
         QFileInfo* outputFile = new QFileInfo( outputFilePath);
         playerSolution->addProgramOutput(*outputFile);
-        runTestCase( solutionFile, inputFile , outputFile->absoluteFilePath() );
+		runTestCase( solutionFile, inputFile , outputFile->absoluteFilePath(), index == inputs.size()-1 );
     }
 }
 
-void CodeSegment::runTestCase(QString solutionFile, QString inputfile, QString outputfile)
+void CodeSegment::runTestCase(QString solutionFile, QString inputfile, QString outputfile, bool isLastFile)
 {
 
     // Create an object to call the user executable
     QProcess* process = new QProcess(this);
-    connect( process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(playerSolutionFinished(int,QProcess::ExitStatus)) );
+
+	if(isLastFile)
+		connect( process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(playerSolutionFinished(int,QProcess::ExitStatus)) );
+
     // Call the player solution
     process->setReadChannelMode(QProcess::SeparateChannels);
     process->setStandardInputFile( inputfile );
@@ -224,6 +227,9 @@ void CodeSegment::setupRunToolbar()
 
 }
 
+
+
+
 void CodeSegment::setupCodeEditor()
 {
     // ToDo: Have several code editors, one for each source file in player's solution
@@ -304,10 +310,17 @@ void CodeSegment::openFolderTriggered()
     this->playerSolution = new PlayerSolution(this);
     this->playerSolution->addSolutionFile(tempSolution);
     this->codeEditor->loadFileContents(tempSolution);
-    this->loadTestCases(*workingDirectory);
+//    this->loadTestCases(*workingDirectory);
 //	connect(openFolderAction, SIGNAL(triggered()), parentMainWindow, SIGNAL(updateResultsDockWidfget())  );
 //	this->resultsDockWidget->createTestCasesTabs();
 
+}
+
+void CodeSegment::playerSolutionFinished(int exitCode, QProcess::ExitStatus exitStatus)
+{
+	Q_UNUSED(exitCode);
+	Q_UNUSED(exitStatus);
+	this->loadTestCases(*workingDirectory);
 }
 
 void CodeSegment::setPointerToResults(ResultsDockWidget* resultsDockWidget)
