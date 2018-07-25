@@ -1,5 +1,6 @@
 ﻿#include "RefractionIDE.h"
 #include "LogManager.h"
+#include <QIcon>
 
 RefractionIDE::RefractionIDE(int& argc, char* argv[])
     :QApplication(argc, argv)

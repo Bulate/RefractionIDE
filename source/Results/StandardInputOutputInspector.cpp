@@ -29,7 +29,7 @@ void StandardInputOutputInspector::buildInspector()
     const QFont font ("Liberation Mono", monospacedFontSize);
     standardInputInspector->setFont(font);
 	standardInputInspector->setReadOnly(true);
-	standardInputInspector->setStyleSheet("background: rgb(222,222,255);");
+	standardInputInspector->setStyleSheet("background: rgb(255,255,153);");
 	addWidget(standardInputInspector);
 
 	userOutputInspector = new QTextEdit();
@@ -40,7 +40,7 @@ void StandardInputOutputInspector::buildInspector()
 	standarExpectedOutputInspector = new QTextEdit();
 	standarExpectedOutputInspector->setReadOnly(true);
     standarExpectedOutputInspector->setFont(font);
-	standarExpectedOutputInspector->setStyleSheet("background: rgb(222,255,222);");
+	standarExpectedOutputInspector->setStyleSheet("background: rgb(153,204,255);");
 	addWidget(standarExpectedOutputInspector);
 
 
