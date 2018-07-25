@@ -15,7 +15,7 @@ const int tabStop = 4; // characters
 
 // After a change is made to the document, CodeEditor waits this amount of miliseconds, and then
 // autosaves and autocompiles the source code
-const int autoSaveWait = 2500; // milliseconds
+const int autoSaveWait = 2; // milliseconds
 
 CodeEditor::CodeEditor(QWidget* parent)
     : QPlainTextEdit(parent)

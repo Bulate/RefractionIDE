@@ -41,12 +41,12 @@ class CodeSegment : public QDockWidget
     /// Object where the actual source code is shown and edited
     CodeEditor* codeEditor = nullptr;
 // /// Manages the list of source files that compound the player's solution to an unit
-	PlayerSolution* playerSolution = nullptr;
+    PlayerSolution* playerSolution = nullptr;
 //	ResultsDockWidget* resultsDockWidget = nullptr;
-	MainWindow* parentMainWindow;
+    MainWindow* parentMainWindow;
 
   protected: // Edit toolbar
-	/// Create new files in the solution: header file, source file and C++ classes
+    /// Create new files in the solution: header file, source file and C++ classes
     QAction* openFolderAction;
     /// Undoes the last action done in the editor
     QAction* undoAction;
@@ -57,19 +57,19 @@ class CodeSegment : public QDockWidget
     /// Copies the current selection in the text editor and places a copy into the clipboard
     QAction* copyAction;
     /// Paste a copy of the clipboard contents over the current selection in the text editor
-	QAction* pasteAction;
-	QAction* saveAction;
+    QAction* pasteAction;
+    QAction* saveAction;
     QDir* workingDirectory;
 
 
 
-	QMenu *fileMenu;
+    QMenu *fileMenu;
 //    /// Let player change the file to be edited, if the solution is compound of several files
 //    QComboBox* fileSelector;
 
   protected: // run menu options
-	void createActions();
-	void createMenus();
+    void createActions();
+    void createMenus();
 
 
   protected: // Run toolbar
@@ -84,7 +84,7 @@ class CodeSegment : public QDockWidget
 
   public:
     /// Constructor
-	explicit CodeSegment(MainWindow *parent = nullptr, Qt::WindowFlags flags = 0);
+    explicit CodeSegment(MainWindow *parent = nullptr, Qt::WindowFlags flags = 0);
     /// Destructor
   virtual ~CodeSegment();
     /// Get access to the code editor
@@ -137,11 +137,11 @@ signals:
     /// action in Run action
     /// @param name Send "Run" or "Resume"
     void setupRunAction(const QString& name, bool enabled);
-	///Reads test cases
-	void loadTestCases(QDir workingDirectory);
+    ///Reads test cases
+    void loadTestCases(QDir workingDirectory);
 //	/// Converts the RunPause action into a Pause action
 //	void setupPauseAction(bool enabled);
-	QFile* createSolutionFile(QDir& workingDirectory);
+    QFile* createSolutionFile(QDir& workingDirectory);
 
   protected slots:
     /// Called when the user calls to open a new folder to work with the editor.

@@ -29,7 +29,7 @@ class MainWindow : public QMainWindow
     ResultsDockWidget *resultsDockWidget = nullptr;
     CodeSegment * codeSegment = nullptr;
     Compiler* compiler = nullptr;
-	QLabel *infoLabel;
+    QLabel *infoLabel;
 
   public:
     /// Constructor
@@ -43,25 +43,20 @@ class MainWindow : public QMainWindow
     /// Adds the result dock widget to the window
     void addResultDockWidget();
 
-	void addMenuFile();
+    void addMenuFile();
 
-	void createActions();
-	void createMenus();
+    void createActions();
+    void createMenus();
 
-	void updateResultsDockWidfget(int testCasesCount
-								  , const QList<QFile *>& testCaseInputs
-								  , const QList<QFile *>& testCaseOutputs);
+    void updateResultsDockWidfget(int testCasesCount
+                                  , const QList<QFile *>& testCaseInputs
+                                  , const QList<QFile *>& testCaseOutputs);
 
   protected slots:
     /// Compiles and runs
     void runSolution();
+    void printError();
 
-signals:
-  /// Emitted when the compilation and linking process finishes
-  void buildFinished();
-  /// Called after the build process of the solution has finished. This method is only called
-  /// when @a programText is a standard generator
-  bool solutionBuildFinished();
 
 
 

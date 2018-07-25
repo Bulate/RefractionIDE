@@ -31,8 +31,8 @@ QDir *CodeSegment::getWorkingDirectory() const
 
 CodeSegment::CodeSegment(MainWindow* parent, Qt::WindowFlags flags)
     : QDockWidget(tr("Program Options"), parent, flags)
-	, innerMainWindow( new QMainWindow(this))
-	, parentMainWindow(parent)
+    , innerMainWindow( new QMainWindow(this))
+    , parentMainWindow(parent)
 {
     setObjectName("codeSegment");
     setFeatures(QDockWidget::NoDockWidgetFeatures);
@@ -65,24 +65,24 @@ void CodeSegment::setupEditingToolbar()
     // Opens a new file in the solution
     openFolderAction = new QAction(QIcon(":/unit_playing/buttons/new_file.svg"), tr("&Open Folder"), this);
     openFolderAction->setObjectName("openFolder");
-	openFolderAction->setShortcut(QKeySequence("Ctrl+N"));
+    openFolderAction->setShortcut(QKeySequence("Ctrl+N"));
     openFolderAction->setStatusTip(tr("Opens a folder to work with the editor"));
     connect(openFolderAction, SIGNAL(triggered()), this, SLOT(openFolderTriggered()));
     editToolBar->addAction(openFolderAction);
 
 
-	// Save file in the solution
-	saveAction = new QAction(QIcon(":/unit_playing/buttons/save.svg"), tr("&Save File"), this);
-	saveAction->setObjectName("save");
-	saveAction->setShortcut(QKeySequence("Ctrl+S"));
-	saveAction->setStatusTip(tr("save file"));
-	connect(codeEditor, SIGNAL(undoAvailable(bool)), saveAction, SLOT(setEnabled(bool)));
-	connect(saveAction, SIGNAL(triggered()), codeEditor, SLOT(save()));
-	editToolBar->addAction(saveAction);
+    // Save file in the solution
+    saveAction = new QAction(QIcon(":/unit_playing/buttons/save.svg"), tr("&Save File"), this);
+    saveAction->setObjectName("save");
+    saveAction->setShortcut(QKeySequence("Ctrl+S"));
+    saveAction->setStatusTip(tr("save file"));
+    connect(codeEditor, SIGNAL(undoAvailable(bool)), saveAction, SLOT(setEnabled(bool)));
+    connect(saveAction, SIGNAL(triggered()), codeEditor, SLOT(save()));
+    editToolBar->addAction(saveAction);
 
 
     // Undo
-	undoAction = new QAction(QIcon(":/unit_playing/buttons/undo.svg"), tr("&Undo"), this);
+    undoAction = new QAction(QIcon(":/unit_playing/buttons/undo.svg"), tr("&Undo"), this);
     undoAction->setObjectName("undo");
     undoAction->setEnabled(false);
     undoAction->setShortcut(QKeySequence("Ctrl+Z"));
@@ -151,11 +151,12 @@ void CodeSegment::setupRunToolbar()
 
     // Create the Run action
     runAction = new QAction(QIcon(":/unit_playing/buttons/run.svg"), tr("R&un"), this);
+    setupRunAction("Run", false);
     runAction->setShortcut(QKeySequence("Ctrl+R"));
     runAction->setEnabled(true);
 
      //  setupRunAction("Run", false);
-    connect(runAction, SIGNAL(triggered()), this, SIGNAL(userRunOrPaused())  );
+    connect(runAction, &QAction::triggered, this, &CodeSegment::userRunOrPaused  );
     toolBar->addAction(runAction);
 
 //    // Create step forward action
@@ -265,12 +266,12 @@ void CodeSegment::setupRunAction(const QString& name, bool enabled)
 
 void CodeSegment::openFolderTriggered()
 {
-	// Send parent to new dialog
+    // Send parent to new dialog
     this->workingDirectory = new QDir(QFileDialog::getExistingDirectory(0, ("Select Output Folder"), QDir::currentPath()));
     QFile* tempSolution = createSolutionFile(*workingDirectory);
-	this->playerSolution = new PlayerSolution(this);
-	this->playerSolution->addSolutionFile(tempSolution);
-	this->codeEditor->loadFileContents(tempSolution);
+    this->playerSolution = new PlayerSolution(this);
+    this->playerSolution->addSolutionFile(tempSolution);
+    this->codeEditor->loadFileContents(tempSolution);
     this->loadTestCases(*workingDirectory);
 //	connect(openFolderAction, SIGNAL(triggered()), parentMainWindow, SIGNAL(updateResultsDockWidfget())  );
 //	this->resultsDockWidget->createTestCasesTabs();
@@ -289,39 +290,39 @@ const QString &CodeSegment::getFilePath()
 
 void CodeSegment::loadTestCases(QDir workingDirectory)
 {
-	QFile* tempTestCaseInput ;
-	QFile* tempTestCaseOutput;
-	///  Dp while there are test cases to load
-	int count = 1;
-	do
-	{
-		QString inputName;
-		inputName.sprintf("%s%03d%s", "input", count, ".txt");
-		QString* inputPath = new QString(workingDirectory.filePath(inputName));
+    QFile* tempTestCaseInput ;
+    QFile* tempTestCaseOutput;
+    ///  Dp while there are test cases to load
+    int count = 1;
+    do
+    {
+        QString inputName;
+        inputName.sprintf("%s%03d%s", "input", count, ".txt");
+        QString* inputPath = new QString(workingDirectory.filePath(inputName));
 
-		QString outputName;
-		outputName.sprintf("%s%03d%s", "output", count, ".txt");
-		QString* outputPath = new QString(workingDirectory.filePath(outputName));
+        QString outputName;
+        outputName.sprintf("%s%03d%s", "output", count, ".txt");
+        QString* outputPath = new QString(workingDirectory.filePath(outputName));
 
-		//std::cerr<<tempPath->toStdString()
-		tempTestCaseInput = new QFile(*inputPath);
-		tempTestCaseOutput = new QFile(*outputPath);
+        //std::cerr<<tempPath->toStdString()
+        tempTestCaseInput = new QFile(*inputPath);
+        tempTestCaseOutput = new QFile(*outputPath);
 
-		if (tempTestCaseInput->exists() && tempTestCaseOutput->exists())
-		{
+        if (tempTestCaseInput->exists() && tempTestCaseOutput->exists())
+        {
             //codeEditor->filepath = *inputPath;
-			this->playerSolution->addInput(tempTestCaseInput);
-			this->playerSolution->addOutput(tempTestCaseOutput);
+            this->playerSolution->addInput(tempTestCaseInput);
+            this->playerSolution->addOutput(tempTestCaseOutput);
 //			std::cerr << "Me lei" ;
-		}
+        }
 
-		++count;
-	}
-	while (tempTestCaseInput->exists());
+        ++count;
+    }
+    while (tempTestCaseInput->exists());
 
-	this->parentMainWindow->updateResultsDockWidfget(playerSolution->getTestCasesCount()
-													 , playerSolution->getTestCaseInputs()
-													 , playerSolution->getTestCaseOutputs());
+    this->parentMainWindow->updateResultsDockWidfget(playerSolution->getTestCasesCount()
+                                                     , playerSolution->getTestCaseInputs()
+                                                     , playerSolution->getTestCaseOutputs());
 
 
 }
