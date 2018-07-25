@@ -1,5 +1,6 @@
 #include "PlayerSolution.h"
-
+#include <QFileInfoList>
+#include <QFileInfo>
 
 
 int PlayerSolution::getTestCasesCount() const
@@ -22,6 +23,16 @@ QList<QFile *> PlayerSolution::getTestCaseOutputs() const
 	return testCaseOutputs;
 }
 
+QFileInfoList PlayerSolution::getInputInfo() const
+{
+    return inputInfo;
+}
+
+QFileInfoList PlayerSolution::getProgramOutputs() const
+{
+    return programOutputs;
+}
+
 PlayerSolution::PlayerSolution(QObject *parent) : QObject(parent)
 {
 
@@ -36,11 +47,20 @@ void PlayerSolution::addSolutionFile(QFile* value)
 void PlayerSolution::addInput(QFile* file)
 {
 	this->testCasesCount++;
-	this->testCaseInputs.append(file);
+    this->testCaseInputs.append(file);
 }
 
+void PlayerSolution::addInputInfo(QFileInfo info)
+{
+    this->inputInfo.append(info);
+}
 
 void PlayerSolution::addOutput(QFile* file)
 {
-	this->testCaseOutputs.append(file);
+    this->testCaseOutputs.append(file);
+}
+
+void PlayerSolution::addProgramOutput(QFileInfo info)
+{
+    this->programOutputs.append(info);
 }

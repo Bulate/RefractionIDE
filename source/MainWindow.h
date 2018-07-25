@@ -30,6 +30,7 @@ class MainWindow : public QMainWindow
     CodeSegment * codeSegment = nullptr;
     Compiler* compiler = nullptr;
     QLabel *infoLabel;
+    int errors = 0;
 
   public:
     /// Constructor
@@ -56,6 +57,7 @@ class MainWindow : public QMainWindow
     /// Compiles and runs
     void runSolution();
     void printError();
+    void runTestCases();
 
 
 

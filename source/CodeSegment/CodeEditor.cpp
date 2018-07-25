@@ -24,8 +24,13 @@ CodeEditor::CodeEditor(QWidget* parent)
 
 {
 
+    #ifdef Q_OS_MAC
+    const int monospacedFontSize = 11;
+    #else
+    const int monospacedFontSize = 10;
+    #endif
     // Set the default monospaced font of the game
-    const QFont font ("Liberation Mono",10);
+    const QFont font ("Liberation Mono", monospacedFontSize);
     setFont(font);
 
     // Make tabs the same size than 4 spaces

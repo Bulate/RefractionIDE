@@ -2,8 +2,7 @@
 #define PLAYERSOLUTION_H
 
 #include <QObject>
-
-
+#include <QFileInfoList>
 class QFile;
 
 
@@ -25,7 +24,9 @@ class PlayerSolution : public QObject
 	QFile* userSolution;
 	/// Stores the test cases
 	QList<QFile*> testCaseInputs;
+    QFileInfoList inputInfo;
 	QList<QFile*> testCaseOutputs;
+    QFileInfoList programOutputs;
 
 	/// The number of available test cases for this player solution
 	/// -1 means that test cases have not been generated
@@ -42,7 +43,9 @@ class PlayerSolution : public QObject
 	explicit PlayerSolution(QObject *parent = nullptr);
 	void addSolutionFile(QFile* value);
 	void addInput(QFile* file);
+    void addInputInfo(QFileInfo info);
 	void addOutput(QFile* file);
+    void addProgramOutput(QFileInfo info);
 
 	int getBuiltSteps() const;
 	void setBuiltSteps(int value);
@@ -54,6 +57,10 @@ class PlayerSolution : public QObject
 	QList<QFile *> getTestCaseInputs() const;
 
 	QList<QFile *> getTestCaseOutputs() const;
+
+    QFileInfoList getInputInfo() const;
+
+    QFileInfoList getProgramOutputs() const;
 
 signals:
 

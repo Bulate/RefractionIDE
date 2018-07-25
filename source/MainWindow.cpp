@@ -28,6 +28,9 @@ void MainWindow::MainWindow::setUp()
 
     resize(1024, 768); // affects only desktop applications
     setMinimumSize(480, 320);
+#ifdef Q_OS_LINUX
+    setWindowIcon(QIcon(":/IDELogo.svg"));
+#endif
 
 }
 
@@ -61,6 +64,7 @@ void MainWindow::runSolution()
 
 
     connect (compiler, &Compiler::finished, this, &MainWindow::printError );
+    connect(compiler, &Compiler::finished, this, &MainWindow::runTestCases);
 }
 
 void MainWindow::printError()
@@ -72,10 +76,16 @@ void MainWindow::printError()
         std::cout << "Entre  " << index.operator*()->getBrief().toStdString();
         this->resultsDockWidget->appendDiagnostic(index.operator*());
     }
-
+    this->errors = compiler->getErrorCount();
     this->compiler->clear();
     this->compiler = nullptr;
 
+}
+
+void MainWindow::runTestCases()
+{
+    if(errors == 0)
+        codeSegment->runTestCases();
 }
 
 

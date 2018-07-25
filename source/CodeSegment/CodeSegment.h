@@ -15,7 +15,9 @@ class QMainWindow;
 class QSlider;
 class MainWindow;
 class QDir;
+class QFileInfo;
 //class Player;
+class QProcess;
 class PlayerSolution;
 //class Unit;
 
@@ -60,6 +62,7 @@ class CodeSegment : public QDockWidget
     QAction* pasteAction;
     QAction* saveAction;
     QDir* workingDirectory;
+    QProcess* process;
 
 
 
@@ -94,6 +97,7 @@ class CodeSegment : public QDockWidget
 //  void loadPlayerCodeForUnit(PlayerSolution* playerSolution, Unit* unit);
     void setPointerToResults(ResultsDockWidget* resultsDockWidget);
     const QString& getFilePath();
+    void runTestCase(QString solutionFile, QString inputfile, QString outputfile);
 //	/// Called when user selects one of the diagnostics in the tools output
 //	/// @param index The index of the selected diagnostic in the allDiagnostics list
 //	void diagnosticSelected(int index);
@@ -110,6 +114,7 @@ class CodeSegment : public QDockWidget
 //	void executionThreadUpdated(ExecutionThread* executionThread, int& maxDuration);
 
     QDir *getWorkingDirectory() const;
+    void runTestCases();
 
 signals:
     //	/// Emitted when user presses the Run/Pause button

@@ -1,12 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>game_logo.svg</file>
-        <file>game_title.svg</file>
-        <file>button_information.svg</file>
-        <file>general.svg</file>
-        <file>game_menu.svg</file>
-        <file>unit_selection.svg</file>
-        <file>unit_playing.svg</file>
+        <file>IDELogo.svg</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>fonts/liberation_mono_regular.ttf</file>

@@ -9,7 +9,9 @@ RefractionIDE::RefractionIDE(int& argc, char* argv[])
     setOrganizationName("UCR");
     setApplicationDisplayName("RefractionIDE");
     setApplicationVersion("1.0.0");
-
+#ifndef Q_OS_LINUX
+  setWindowIcon(QIcon(":/IDELogo.svg"));
+#endif
     // Managers use the settings, create them after resetting the settings
     // Enable logging of messages to a file
     this->logManager = new LogManager(this);

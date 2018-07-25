@@ -11,13 +11,15 @@
 //#include "Unit.h"
 //#include "VisualizationContext.h"
 //#include "VisualizationSpeed.h"
-
+#include <QProcess>
 #include <QAction>
 #include <QComboBox>
 #include <QMainWindow>
 #include <QSlider>
 #include <QToolBar>
+#include <QString>
 #include <QFileDialog>
+#include <iostream>
 #include <string>
 #include "MainWindow.h"
 
@@ -27,6 +29,36 @@ const int toolBarIconSize = 18;
 QDir *CodeSegment::getWorkingDirectory() const
 {
     return workingDirectory;
+}
+
+void CodeSegment::runTestCases()
+{
+    QString solutionFile = this->getWorkingDirectory()->absolutePath() + QDir::separator() +"solution.out" ;
+    QFileInfoList inputs = playerSolution->getInputInfo();
+    // Create a tester for each test case and run the test case
+    for ( int index = 0; index < inputs.size(); ++index )
+    {
+        QString inputFile = inputs.at(index).absoluteFilePath();
+        QString outputFilePath;
+        outputFilePath.sprintf("%s%c%s%03d%s", this->getWorkingDirectory()->absolutePath().toStdString().c_str(), QDir::separator().toLatin1() , "p_output" , index+1 , ".txt");
+        //std::cerr << outputFilePath.toStdString();
+        QFileInfo* outputFile = new QFileInfo( outputFilePath);
+        playerSolution->addProgramOutput(*outputFile);
+        runTestCase( solutionFile, inputFile , outputFile->absoluteFilePath() );
+    }
+}
+
+void CodeSegment::runTestCase(QString solutionFile, QString inputfile, QString outputfile)
+{
+
+    // Create an object to call the user executable
+    QProcess* process = new QProcess(this);
+    connect( process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(playerSolutionFinished(int,QProcess::ExitStatus)) );
+    // Call the player solution
+    process->setReadChannelMode(QProcess::SeparateChannels);
+    process->setStandardInputFile( inputfile );
+    process->setStandardOutputFile( outputfile );
+    process->start( solutionFile );
 }
 
 CodeSegment::CodeSegment(MainWindow* parent, Qt::WindowFlags flags)
@@ -288,10 +320,13 @@ const QString &CodeSegment::getFilePath()
     return this->codeEditor->filepath;
 }
 
+
+
 void CodeSegment::loadTestCases(QDir workingDirectory)
 {
     QFile* tempTestCaseInput ;
     QFile* tempTestCaseOutput;
+    QFileInfo* tempTestCaseInputInfo;
     ///  Dp while there are test cases to load
     int count = 1;
     do
@@ -307,11 +342,13 @@ void CodeSegment::loadTestCases(QDir workingDirectory)
         //std::cerr<<tempPath->toStdString()
         tempTestCaseInput = new QFile(*inputPath);
         tempTestCaseOutput = new QFile(*outputPath);
+        tempTestCaseInputInfo = new QFileInfo(*inputPath);
 
         if (tempTestCaseInput->exists() && tempTestCaseOutput->exists())
         {
             //codeEditor->filepath = *inputPath;
             this->playerSolution->addInput(tempTestCaseInput);
+            this->playerSolution->addInputInfo(*tempTestCaseInputInfo);
             this->playerSolution->addOutput(tempTestCaseOutput);
 //			std::cerr << "Me lei" ;
         }

@@ -20,6 +20,14 @@ void StandardInputOutputInspector::buildInspector()
 {
 
 	standardInputInspector = new QTextEdit();
+    #ifdef Q_OS_MAC
+    const int monospacedFontSize = 11;
+    #else
+    const int monospacedFontSize = 10;
+    #endif
+    // Set the default monospaced font of the game
+    const QFont font ("Liberation Mono", monospacedFontSize);
+    standardInputInspector->setFont(font);
 	standardInputInspector->setReadOnly(true);
 	standardInputInspector->setStyleSheet("background: rgb(222,222,255);");
 	addWidget(standardInputInspector);
@@ -31,6 +39,7 @@ void StandardInputOutputInspector::buildInspector()
 
 	standarExpectedOutputInspector = new QTextEdit();
 	standarExpectedOutputInspector->setReadOnly(true);
+    standarExpectedOutputInspector->setFont(font);
 	standarExpectedOutputInspector->setStyleSheet("background: rgb(222,255,222);");
 	addWidget(standarExpectedOutputInspector);
 
