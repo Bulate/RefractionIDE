@@ -33,12 +33,15 @@ class StandardInputOutputInspector : public QSplitter
   public:
 	/// Constructor
 	explicit StandardInputOutputInspector(QWidget* parent = nullptr);
+    /// Sets the input on the tab widget display
 	void setInput(QFile* file);
-	void setOutput(QFile* file);
+    /// Sets the expected output on the tab widget display
+    void setOutput(QFile* file);
+    /// Sets a text program output on the tab widget display
     void setProgramOutput(QFile* file);
+    /// Sets an HTML program output on the tab widget display
     void setProgramOutputHTML(QFile* file);
 
-  public slots:
 
   protected:
 	/// Builds the inspector with three areas

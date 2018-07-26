@@ -21,17 +21,21 @@ protected:
     QString outputFileHtmlPath;
 
 public:
-    /// Constructor. Recieves all of the files that
+    /// Constructor. Recieves all of the files that are needed for file comparison
     DiffFileGenerator(QObject *parent, const QFileInfoList &outputInfoList
                       , const QFileInfoList &programOutputInfoList
                       , const QDir workingDirectory
                       , int index);
-
+    /// Generates a .diff file from two files
     void generateDiffFile( );
 signals:
+    /// Announces the HTML file has been generated
     void htmlFileGenerated(int index, QString outputFileHtmlPath);
 public slots:
+    /// Generates the differentiated .html from a .diff file
     void callDiff2Html();
+    /// Is called when the finished signal from the diff2html process
+    /// is emited. Throws htmlFileGenerated signal.
     void diff2HtmlFinished();
 };
 

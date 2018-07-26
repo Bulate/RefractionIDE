@@ -25,10 +25,15 @@ class PlayerSolution : public QObject
 	QFile* userSolution;
 	/// Stores the test cases
 	QList<QFile*> testCaseInputs;
+    /// List of the information of test case inputs
     QFileInfoList inputInfo;
+    /// List of the information of test case outputs
 	QFileInfoList outputInfo;
+    /// List of the of test case output files
 	QList<QFile*> testCaseOutputs;
+    /// List of the of the program output files
     QList<QFile*> programOutputs;
+   /// List of the information of the program outputs
     QFileInfoList programOutputsInfo;
 
 	/// The number of available test cases for this player solution
@@ -43,6 +48,7 @@ class PlayerSolution : public QObject
 
 
   public:
+    ///
 	explicit PlayerSolution(QObject *parent = nullptr);
 	void addSolutionFile(QFile* value);
 	void addInput(QFile* file);

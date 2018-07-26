@@ -45,12 +45,14 @@ class MainWindow : public QMainWindow
     void addCodeSegment();
     /// Adds the result dock widget to the window
     void addResultDockWidget();
-
+    /// ToDo Add file menu
     void addMenuFile();
 
+    /// ToDo create actions
     void createActions();
+    /// TODO Create menus
     void createMenus();
-
+    /// Calls the update of a results dock widget.
     void updateResultsDockWidfget(int testCasesCount
                                   , const QList<QFile *>& testCaseInputs
                                   , const QList<QFile *>& testCaseOutputs
@@ -64,7 +66,9 @@ class MainWindow : public QMainWindow
   protected slots:
     /// Compiles and runs
     void runSolution();
+    /// Displays the errors from the compiler on the compiler output tab
     void printError();
+    /// Runs the player solution against all of the test cases
     void runTestCases();
 
 
