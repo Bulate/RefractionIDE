@@ -345,6 +345,7 @@ void CodeSegment::loadTestCases(QDir workingDirectory)
                                                      , playerSolution->getTestCaseOutputs()
                                                      , playerSolution->getProgramOutputs()
 													 , this->testCaseState
+                                                     , playerSolution->getInputInfo()
 													 , playerSolution->getOutputInfo()
 													 , playerSolution->getProgramOutputsInfo()
 													 , workingDirectory );

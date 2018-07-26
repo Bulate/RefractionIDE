@@ -51,7 +51,8 @@ SOURCES += \
     source/ToolCall/Compiler/LinkerCall.cpp \
     source/ToolCall/Compiler/LinkerDiagnostic.cpp \
     source/Common/LogManager.cpp \
-    source/ToolCall/ToolCall.cpp
+    source/ToolCall/ToolCall.cpp \
+    source/Results/DiffFileGenerator.cpp
 
 
 HEADERS += \
@@ -72,7 +73,8 @@ HEADERS += \
     source/ToolCall/Compiler/LinkerCall.h \
     source/ToolCall/Compiler/LinkerDiagnostic.h \
     source/Common/LogManager.h \
-    source/ToolCall/ToolCall.h
+    source/ToolCall/ToolCall.h \
+    source/Results/DiffFileGenerator.h
 
 RESOURCES += \
     assets/assets.qrc

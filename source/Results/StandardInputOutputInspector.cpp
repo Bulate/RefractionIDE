@@ -78,6 +78,17 @@ void StandardInputOutputInspector::setProgramOutput(QFile* file)
 
 }
 
+void StandardInputOutputInspector::setProgramOutputHTML(QFile* file)
+{
+    if ( file->open(QFile::ReadOnly) )
+    {
+        standardProgramOutputInspector->setHtml(file->readAll());
+    }
+
+    //	document()->setModified(false); // ToDo AVERIGUAR QUÉ HACE
+
+}
+
 void StandardInputOutputInspector::toggleOutputError()
 {
 	bool checked = toggleOutputErrorAction->isChecked();

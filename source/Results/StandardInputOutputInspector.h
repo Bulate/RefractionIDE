@@ -36,6 +36,7 @@ class StandardInputOutputInspector : public QSplitter
 	void setInput(QFile* file);
 	void setOutput(QFile* file);
     void setProgramOutput(QFile* file);
+    void setProgramOutputHTML(QFile* file);
 
   public slots:
 
