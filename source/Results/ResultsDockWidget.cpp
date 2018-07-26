@@ -4,6 +4,8 @@
 #include <iostream>
 #include "ToolCall/Compiler/Diagnostic.h"
 #include <QAction>
+#include <QProcess>
+#include <QDir>
 
 ResultsDockWidget::ResultsDockWidget(QWidget* parent, Qt::WindowFlags flags)
     : QDockWidget(tr("Results"), parent, flags)
@@ -48,10 +50,13 @@ ResultsDockWidget::ResultsDockWidget(QWidget* parent, Qt::WindowFlags flags)
 }
 
 void ResultsDockWidget::createTestCasesTabs(int testCasesCount
-                                            , const QList<QFile *> &testCaseInputs
-                                            , const QList<QFile *> &testCaseOutputs
-                                            , const QList<QFile *> &testProgramOutputs
-                                            , const QList<bool> testCaseState)
+											, const QList<QFile *> &testCaseInputs
+											, const QList<QFile *> &testCaseOutputs
+											, const QList<QFile *> &testProgramOutputs
+											, const QList<bool> testCaseState
+											, const QFileInfoList &outputInfoList
+											, const QFileInfoList &programOutputInfoList
+											, const QDir workingDirectory )
 {
 //	std::cerr << "Voy a entrar " << testCasesCount;
      for (int index = 0; index < testCasesCount; ++ index)
@@ -61,14 +66,90 @@ void ResultsDockWidget::createTestCasesTabs(int testCasesCount
          if (testCaseState.at(index))
              toolsOutputIcon = new QIcon(":/unit_playing/buttons/accept.svg");
          else
+		 {
              toolsOutputIcon = new QIcon(":/unit_playing/buttons/error.svg");
+			 generateDiffFile( outputInfoList, programOutputInfoList, workingDirectory , index);
+			 testSlot();
+		 }
          resultsTabWidget->addTab(standardInputOutputInspector, *toolsOutputIcon, QString::number(index + 1));
          standardInputOutputInspector->setInput(testCaseInputs.at(index));
          standardInputOutputInspector->setOutput(testCaseOutputs.at(index));
-         standardInputOutputInspector->setProgramOutput(testProgramOutputs.at(index));
+		 standardInputOutputInspector->setProgramOutput(testProgramOutputs.at(index));
 
      }
 }
+
+void ResultsDockWidget::generateDiffFile(  const QFileInfoList &outputInfoList
+										 , const QFileInfoList &programOutputInfoList
+										 , const QDir workingDirectory
+										 , int index )
+{
+	//this->workingDirectory = workingDirectory;
+	 QString diffCall = "diff";
+	 QStringList arguments;
+	 QProcess* myProcess = new QProcess(this);
+	 myProcess->setProgram("diff");
+
+
+	 this->outputFileHtmlfPath.sprintf("%s%c%s%03d%s", workingDirectory.absolutePath().toStdString().c_str()
+								, QDir::separator().toLatin1() , "p_output" , index+1 , ".html");
+
+
+	 this->outputFileDiffPath.sprintf("%s%c%s%03d%s", workingDirectory.absolutePath().toStdString().c_str()
+								, QDir::separator().toLatin1() , "p_output" , index+1 , ".diff");
+	 myProcess->setReadChannelMode(QProcess::SeparateChannels);
+	 myProcess->setStandardOutputFile( outputFileDiffPath );
+
+	 arguments <<  "-w" <<  "-U 1000" << outputInfoList.at(index).absoluteFilePath()
+			   << programOutputInfoList.at(index).absoluteFilePath();
+	 myProcess->setArguments(arguments);
+
+	 myProcess->start(diffCall, arguments);
+
+
+
+
+}
+
+void ResultsDockWidget::testSlot()
+{
+	QString diffCall = "diff2html";
+	QStringList arguments;
+	QProcess* myProcess = new QProcess(this);
+	myProcess->setProgram("diff2html");
+
+
+	myProcess->setReadChannelMode(QProcess::SeparateChannels);
+	myProcess->setStandardOutputFile( outputFileHtmlfPath );
+
+	arguments << "--su hidden" << "-i file" <<"--" << outputFileDiffPath;
+	myProcess->setArguments(arguments);
+
+	myProcess->start(diffCall, arguments);
+}
+
+void ResultsDockWidget::generateHtmlFile( QString outputFileHtmlfPath, QString outputFileDiffPath)
+{
+
+	//diff2html --su hidden -i file -F "solution_diff.html" -- "output000.diff"
+
+	QString diffCall = "diff2html";
+	QStringList arguments;
+	QProcess* myProcess = new QProcess(this);
+	myProcess->setProgram("diff2html");
+
+
+	myProcess->setReadChannelMode(QProcess::SeparateChannels);
+	myProcess->setStandardOutputFile( outputFileHtmlfPath );
+
+	//arguments << "--su hidden" << "-i file" << <,"--" << outputFileDiffPath;
+	myProcess->setArguments(arguments);
+
+	myProcess->start(diffCall, arguments);
+	std::cerr << "Puto";
+
+}
+
 
 void ResultsDockWidget::appendDiagnostic(const Diagnostic* diagnostic)
 {

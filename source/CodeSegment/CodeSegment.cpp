@@ -276,22 +276,29 @@ const QString &CodeSegment::getFilePath()
 
 void CodeSegment::getTestCaseInfo(QDir workingDirectory)
 {
-    QFileInfo* tempTestCaseInfo;
+	QFileInfo* tempInputInfo;
+	QFileInfo* tempOutputInfo;
     int count = 1;
     do
     {
         QString inputName;
         inputName.sprintf("%s%03d%s", "input", count, ".txt");
         QString* inputPath = new QString(workingDirectory.filePath(inputName));
-        tempTestCaseInfo = new QFileInfo(*inputPath);
+		tempInputInfo = new QFileInfo(*inputPath);
 
-        if (tempTestCaseInfo->exists())
+		QString outputName;
+		outputName.sprintf("%s%03d%s", "output", count, ".txt");
+		QString* outputPath = new QString(workingDirectory.filePath(outputName));
+		tempOutputInfo = new QFileInfo(*outputPath);
+
+		if (tempInputInfo->exists() && tempOutputInfo->exists())
         {
-            this->playerSolution->addInputInfo(*tempTestCaseInfo);
+			this->playerSolution->addInputInfo(*tempInputInfo);
+			this->playerSolution->addOutputInfo(*tempOutputInfo);
         }
 
         ++count;
-    }while (tempTestCaseInfo->exists());
+	}while (tempInputInfo->exists());
 }
 void CodeSegment::loadTestCases(QDir workingDirectory)
 {
@@ -334,10 +341,13 @@ void CodeSegment::loadTestCases(QDir workingDirectory)
 
 
     this->parentMainWindow->updateResultsDockWidfget(playerSolution->getTestCasesCount()
-                                                     , playerSolution->getTestCaseInputs()
+													 , playerSolution->getTestCaseInputs()
                                                      , playerSolution->getTestCaseOutputs()
                                                      , playerSolution->getProgramOutputs()
-                                                     , this->testCaseState);
+													 , this->testCaseState
+													 , playerSolution->getOutputInfo()
+													 , playerSolution->getProgramOutputsInfo()
+													 , workingDirectory );
 
 
 }

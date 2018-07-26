@@ -6,6 +6,7 @@
 #include <QProcess>
 #include <QFileInfo>
 #include <QChar>
+#include <QDir>
 
 class CodeEditor;
 //class Compiler;

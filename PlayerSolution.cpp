@@ -27,6 +27,13 @@ QFileInfoList PlayerSolution::getInputInfo() const
 {
     return inputInfo;
 }
+
+
+QFileInfoList PlayerSolution::getOutputInfo() const
+{
+	return outputInfo;
+}
+
 QFileInfoList PlayerSolution::getProgramOutputsInfo() const
 {
     return programOutputsInfo;
@@ -59,6 +66,11 @@ void PlayerSolution::addInput(QFile* file)
 void PlayerSolution::addInputInfo(QFileInfo info)
 {
     this->inputInfo.append(info);
+}
+
+void PlayerSolution::addOutputInfo(QFileInfo info)
+{
+	this->outputInfo.append(info);
 }
 
 void PlayerSolution::addOutput(QFile* file)

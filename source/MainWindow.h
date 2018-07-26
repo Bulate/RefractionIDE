@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QFileInfoList>
 
 // Forward declaration needed
 class CodeEditor;
@@ -10,6 +11,7 @@ class ResultsDockWidget;
 class QLabel;
 class QFile;
 class Compiler;
+class QDir;
 
 /**
  * @brief The MainWindow class
@@ -49,11 +51,14 @@ class MainWindow : public QMainWindow
     void createActions();
     void createMenus();
 
-    void updateResultsDockWidfget(int testCasesCount
-                                  , const QList<QFile *>& testCaseInputs
-                                  , const QList<QFile *>& testCaseOutputs
-                                  , const QList<QFile *>& testProgramOutputs
-                                  , const QList<bool> testCaseState);
+	void updateResultsDockWidfget(int testCasesCount
+								  , const QList<QFile *>& testCaseInputs
+								  , const QList<QFile *>& testCaseOutputs
+								  , const QList<QFile *>& testProgramOutputs
+								  , const QList<bool> testCaseState
+								  , const QFileInfoList &outputInfoList
+								  , const QFileInfoList &programOutputInfoList
+								  , const QDir workingDirectory);
 
   protected slots:
     /// Compiles and runs

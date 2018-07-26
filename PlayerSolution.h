@@ -7,6 +7,7 @@ class QFile;
 
 
 
+
 class PlayerSolution : public QObject
 {
     Q_OBJECT
@@ -25,6 +26,7 @@ class PlayerSolution : public QObject
 	/// Stores the test cases
 	QList<QFile*> testCaseInputs;
     QFileInfoList inputInfo;
+	QFileInfoList outputInfo;
 	QList<QFile*> testCaseOutputs;
     QList<QFile*> programOutputs;
     QFileInfoList programOutputsInfo;
@@ -48,6 +50,8 @@ class PlayerSolution : public QObject
 	void addOutput(QFile* file);
     void addProgramOutput(QFile* file);
     void addProgramOutputInfo(QFileInfo info);
+	void addOutputInfo(QFileInfo info);
+
 
 	int getBuiltSteps() const;
 	void setBuiltSteps(int value);
@@ -61,6 +65,8 @@ class PlayerSolution : public QObject
 	QList<QFile *> getTestCaseOutputs() const;
 
     QFileInfoList getInputInfo() const;
+
+	QFileInfoList getOutputInfo() const;
 
     QList<QFile*> getProgramOutputs() const;
 
