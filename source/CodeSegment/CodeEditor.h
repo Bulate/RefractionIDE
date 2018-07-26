@@ -46,8 +46,9 @@ class CodeEditor : public QPlainTextEdit
     /// When the line number area object must be painted, this method is called
     /// @remarks LineNumberArea class calls this method
     void lineNumberAreaPaintEvent(QPaintEvent* event);
+    /// Gets all of the text contained in one file and displays it on the Text Editor
 	bool loadFileContents(QFile* file);
-	bool loadFilePath(const QString& filepath);
+
 
 
  protected slots:

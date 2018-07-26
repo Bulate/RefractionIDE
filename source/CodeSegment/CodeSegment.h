@@ -65,18 +65,23 @@ class CodeSegment : public QDockWidget
     QAction* copyAction;
     /// Paste a copy of the clipboard contents over the current selection in the text editor
     QAction* pasteAction;
+    /// Save the progress on the document to the solution file
     QAction* saveAction;
+    /// Stores the user selected working folder
     QDir* workingDirectory;
+    /// Pointer to the user proces being executed
     QProcess* process;
+    /// Stores wether each test case was passed or not
     QList<bool> testCaseState;
 
 
-
+    /// Shows the option menu
     QMenu *fileMenu;
 //    /// Let player change the file to be edited, if the solution is compound of several files
 //    QComboBox* fileSelector;
 
   protected: // run menu options
+
     void createActions();
     void createMenus();
 
@@ -102,39 +107,22 @@ class CodeSegment : public QDockWidget
     /// player nas not played this unit
 //  void loadPlayerCodeForUnit(PlayerSolution* playerSolution, Unit* unit);
     void setPointerToResults(ResultsDockWidget* resultsDockWidget);
+    /// Getter for File Path atribute
     const QString& getFilePath();
+    ///
     void runTestCase(QString solutionFile, QString inputfile, QString outputfile, bool isLastFile, const QList<QFile *> &expectedOutput, int index);
     long findFirstDiff(QFile &inputFile1, QFile &inputFile2, bool ignoreWhitespace, bool caseSensitive);
     QChar readNextChar(QTextStream& input, bool ignoreWhitespace, bool caseSensitive, bool eatWhitespace, long* position = nullptr);
-//	/// Called when user selects one of the diagnostics in the tools output
-//	/// @param index The index of the selected diagnostic in the allDiagnostics list
-//	void diagnosticSelected(int index);
-//	/// Get access to the breakpoints list set by the user
-//	QList<GuiBreakpoint*> retrieveBreakpoints();
-//	/// Called when the visualization changes it state (stopped, starting, running, finished) to
-//	/// enable or disable visualization control buttons
-//	void onStateChanged(UnitPlayingState currentState);
-//	/// Called when the player solution has finished to compile and link
-//	void playerSolutionBuilt(CompiledProgram* playerSolutionProgram);
-//	/// Called when visualization has finished in order to clear highlited lines
-//	void clearAnimation();
-//	/// Called when an execution thread was updated from GDB in order to update the highlighted line
-//	void executionThreadUpdated(ExecutionThread* executionThread, int& maxDuration);
 
+    /// Rgetter method for the working directory attribute
     QDir *getWorkingDirectory() const;
+    /// Runs the user solution against all of the test cases
     void runTestCases();
 
 signals:
-    //	/// Emitted when user presses the Run/Pause button
+    /// Emitted when user presses the Run/Pause button
     void userRunOrPaused();
-//	/// Called when the step over button is pressed
-//	void userSteppedForward();
-//	/// Emitted when the stop button is pressed
-//	void userStopped();
-//	/// Emited when user presses over a breakpoint symbol in any code editor window in order to
-//	/// remove the breakpoint. Visualization controller requires this signal in order to clear
-//	/// the breakpont in debugger when visualization is running.
-//  void breakpointAction(GuiBreakpoint* guiBreakpoint);  NO SE USA
+
 
  protected:
     QAction* runOrPauseAction;
@@ -155,8 +143,7 @@ signals:
     void getTestCaseInfo(QDir workingDirectory);
     ///Reads test cases
     void loadTestCases(QDir workingDirectory);
-//	/// Converts the RunPause action into a Pause action
-//	void setupPauseAction(bool enabled);
+    /// Creates a solution QFile from a working Directory
     QFile* createSolutionFile(QDir& workingDirectory);
 
   protected slots:
@@ -164,11 +151,9 @@ signals:
     void openFolderTriggered();
 	/// Called when the solution has been run, to display the result on screen
 	void playerSolutionFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    /// Verifies if a test case is correct or not.
     void checkTestCase(QFile *programOutput, QFile *expectedOutput);
-//	/// Called when player selects another source file in the file selector combo box
-//	void fileSelectorIndexChanged(const QString& text);
-//	/// Called when the visualization speed is changed by user
-//	void visualizationSpeedChanged(int speed);
+
 };
 
 #endif // CODESEGMENT_H
