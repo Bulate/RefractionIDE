@@ -26,7 +26,8 @@ class PlayerSolution : public QObject
 	QList<QFile*> testCaseInputs;
     QFileInfoList inputInfo;
 	QList<QFile*> testCaseOutputs;
-    QFileInfoList programOutputs;
+    QList<QFile*> programOutputs;
+    QFileInfoList programOutputsInfo;
 
 	/// The number of available test cases for this player solution
 	/// -1 means that test cases have not been generated
@@ -45,7 +46,8 @@ class PlayerSolution : public QObject
 	void addInput(QFile* file);
     void addInputInfo(QFileInfo info);
 	void addOutput(QFile* file);
-    void addProgramOutput(QFileInfo info);
+    void addProgramOutput(QFile* file);
+    void addProgramOutputInfo(QFileInfo info);
 
 	int getBuiltSteps() const;
 	void setBuiltSteps(int value);
@@ -60,7 +62,9 @@ class PlayerSolution : public QObject
 
     QFileInfoList getInputInfo() const;
 
-    QFileInfoList getProgramOutputs() const;
+    QList<QFile*> getProgramOutputs() const;
+
+    QFileInfoList getProgramOutputsInfo() const;
 
 signals:
 

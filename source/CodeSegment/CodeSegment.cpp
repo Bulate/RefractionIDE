@@ -43,8 +43,8 @@ void CodeSegment::runTestCases()
         outputFilePath.sprintf("%s%c%s%03d%s", this->getWorkingDirectory()->absolutePath().toStdString().c_str(), QDir::separator().toLatin1() , "p_output" , index+1 , ".txt");
         //std::cerr << outputFilePath.toStdString();
         QFileInfo* outputFile = new QFileInfo( outputFilePath);
-        playerSolution->addProgramOutput(*outputFile);
-		runTestCase( solutionFile, inputFile , outputFile->absoluteFilePath(), index == inputs.size()-1 );
+        playerSolution->addProgramOutputInfo(*outputFile);
+        runTestCase( solutionFile, inputFile , outputFile->absoluteFilePath(), index == inputs.size()-1 );
     }
 }
 
@@ -259,6 +259,8 @@ void CodeSegment::setupRunAction(const QString& name, bool enabled)
     runOrPauseAction->setEnabled(enabled);
 }
 
+
+
 ////void CodeSegment::setupPauseAction(bool enabled)
 ////{
 ////	runOrPauseAction->setObjectName("Pause");
@@ -310,7 +312,7 @@ void CodeSegment::openFolderTriggered()
     this->playerSolution = new PlayerSolution(this);
     this->playerSolution->addSolutionFile(tempSolution);
     this->codeEditor->loadFileContents(tempSolution);
-//    this->loadTestCases(*workingDirectory);
+    this->getTestCaseInfo(*workingDirectory);
 //	connect(openFolderAction, SIGNAL(triggered()), parentMainWindow, SIGNAL(updateResultsDockWidfget())  );
 //	this->resultsDockWidget->createTestCasesTabs();
 
@@ -319,13 +321,13 @@ void CodeSegment::openFolderTriggered()
 void CodeSegment::playerSolutionFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
 	Q_UNUSED(exitCode);
-	Q_UNUSED(exitStatus);
+	Q_UNUSED(exitStatus);    
 	this->loadTestCases(*workingDirectory);
 }
 
 void CodeSegment::setPointerToResults(ResultsDockWidget* resultsDockWidget)
 {
-    //this->resultsDockWidget = resultsDockWidget;
+    (void) resultsDockWidget;
 }
 
 const QString &CodeSegment::getFilePath()
@@ -334,12 +336,31 @@ const QString &CodeSegment::getFilePath()
 }
 
 
+void CodeSegment::getTestCaseInfo(QDir workingDirectory)
+{
+    QFileInfo* tempTestCaseInfo;
+    int count = 1;
+    do
+    {
+        QString inputName;
+        inputName.sprintf("%s%03d%s", "input", count, ".txt");
+        QString* inputPath = new QString(workingDirectory.filePath(inputName));
+        tempTestCaseInfo = new QFileInfo(*inputPath);
 
+        if (tempTestCaseInfo->exists())
+        {
+            this->playerSolution->addInputInfo(*tempTestCaseInfo);
+        }
+
+        ++count;
+    }while (tempTestCaseInfo->exists());
+}
 void CodeSegment::loadTestCases(QDir workingDirectory)
 {
     QFile* tempTestCaseInput ;
     QFile* tempTestCaseOutput;
-    QFileInfo* tempTestCaseInputInfo;
+    QFile* tempProgramOutput;
+
     ///  Dp while there are test cases to load
     int count = 1;
     do
@@ -352,27 +373,31 @@ void CodeSegment::loadTestCases(QDir workingDirectory)
         outputName.sprintf("%s%03d%s", "output", count, ".txt");
         QString* outputPath = new QString(workingDirectory.filePath(outputName));
 
+        QString pOutputName;
+        pOutputName.sprintf("%s%03d%s", "p_output", count, ".txt");
+        QString* pOutputPath = new QString(workingDirectory.filePath(pOutputName));
+
         //std::cerr<<tempPath->toStdString()
         tempTestCaseInput = new QFile(*inputPath);
         tempTestCaseOutput = new QFile(*outputPath);
-        tempTestCaseInputInfo = new QFileInfo(*inputPath);
+        tempProgramOutput = new QFile(*pOutputPath);
 
-        if (tempTestCaseInput->exists() && tempTestCaseOutput->exists())
+        if (tempTestCaseInput->exists() && tempTestCaseOutput->exists() && tempProgramOutput->exists())
         {
             //codeEditor->filepath = *inputPath;
             this->playerSolution->addInput(tempTestCaseInput);
-            this->playerSolution->addInputInfo(*tempTestCaseInputInfo);
             this->playerSolution->addOutput(tempTestCaseOutput);
+            this->playerSolution->addProgramOutput(tempProgramOutput);
 //			std::cerr << "Me lei" ;
         }
 
         ++count;
-    }
-    while (tempTestCaseInput->exists());
+    } while (tempTestCaseInput->exists());
 
     this->parentMainWindow->updateResultsDockWidfget(playerSolution->getTestCasesCount()
                                                      , playerSolution->getTestCaseInputs()
-                                                     , playerSolution->getTestCaseOutputs());
+                                                     , playerSolution->getTestCaseOutputs()
+                                                     , playerSolution->getProgramOutputs());
 
 
 }

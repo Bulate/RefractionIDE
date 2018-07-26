@@ -22,20 +22,20 @@ class StandardInputOutputInspector : public QSplitter
 	QToolBar* toolBar = nullptr;
 	/// Shows expected test case's standard output (grey) and player solution output. The latter
 	/// is (black) when matches the former, or (red) otherwise
-    QTextEdit* standarExpectedOutputInspector = nullptr;
+    QTextEdit* standardExpectedOutputInspector = nullptr;
 	/// Compares the player solution error output against test case's expected standard error
-	QTextEdit* standardErrorInspector = nullptr;
+    QTextEdit* standardProgramOutputInspector = nullptr;
 	/// Toggles between standard output and standard error
 	QAction* toggleOutputErrorAction = nullptr;
 	/// We are visualizing input/output for this test case number
 	int testCaseNumber = -1;
-        QTextEdit* userOutputInspector = nullptr;
 
   public:
 	/// Constructor
 	explicit StandardInputOutputInspector(QWidget* parent = nullptr);
 	void setInput(QFile* file);
 	void setOutput(QFile* file);
+    void setProgramOutput(QFile* file);
 
   public slots:
 

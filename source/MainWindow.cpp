@@ -93,9 +93,10 @@ void MainWindow::runTestCases()
 
 void MainWindow::updateResultsDockWidfget(int testCasesCount
                                           , const QList<QFile *> &testCaseInputs
-                                          , const QList<QFile *> &testCaseOutputs)
+                                          , const QList<QFile *> &testCaseOutputs
+                                          , const QList<QFile *> &testProgramOutputs)
 {
-    resultsDockWidget->createTestCasesTabs(testCasesCount, testCaseInputs, testCaseOutputs);
+    resultsDockWidget->createTestCasesTabs(testCasesCount, testCaseInputs, testCaseOutputs, testProgramOutputs);
 }
 
 void MainWindow::addMenuFile()

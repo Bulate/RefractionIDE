@@ -1,4 +1,4 @@
-#include "StandardInputOutputInspector.h"
+﻿#include "StandardInputOutputInspector.h"
 
 #include <QAction>
 #include <QTextEdit>
@@ -32,16 +32,18 @@ void StandardInputOutputInspector::buildInspector()
 	standardInputInspector->setStyleSheet("background: rgb(255,255,153);");
 	addWidget(standardInputInspector);
 
-	userOutputInspector = new QTextEdit();
-	userOutputInspector->setReadOnly(true);
-	userOutputInspector->setStyleSheet("background: rgb(150,222,255);");
-	addWidget(userOutputInspector);
+    standardExpectedOutputInspector = new QTextEdit();
+    standardExpectedOutputInspector->setReadOnly(true);
+    standardExpectedOutputInspector->setFont(font);
+    standardExpectedOutputInspector->setStyleSheet("background: rgb(153,204,255);");
+    addWidget(standardExpectedOutputInspector);
 
-	standarExpectedOutputInspector = new QTextEdit();
-	standarExpectedOutputInspector->setReadOnly(true);
-    standarExpectedOutputInspector->setFont(font);
-	standarExpectedOutputInspector->setStyleSheet("background: rgb(153,204,255);");
-	addWidget(standarExpectedOutputInspector);
+    standardProgramOutputInspector = new QTextEdit();
+    standardProgramOutputInspector->setReadOnly(true);
+    standardProgramOutputInspector->setFont(font);
+    standardProgramOutputInspector->setStyleSheet("background: rgb(150,222,255);");
+    addWidget(standardProgramOutputInspector);
+
 
 
 }
@@ -61,8 +63,19 @@ void StandardInputOutputInspector::setOutput(QFile* file)
 {
 	if ( file->open(QFile::ReadOnly) )
 	{
-		standarExpectedOutputInspector->setPlainText(file->readAll());
+        standardExpectedOutputInspector->setPlainText(file->readAll());
 	}
+
+//	document()->setModified(false); // ToDo AVERIGUAR QUÉ HACE
+
+}
+
+void StandardInputOutputInspector::setProgramOutput(QFile* file)
+{
+    if ( file->open(QFile::ReadOnly) )
+    {
+        standardProgramOutputInspector->setPlainText(file->readAll());
+    }
 
 //	document()->setModified(false); // ToDo AVERIGUAR QUÉ HACE
 
@@ -71,8 +84,8 @@ void StandardInputOutputInspector::setOutput(QFile* file)
 void StandardInputOutputInspector::toggleOutputError()
 {
 	bool checked = toggleOutputErrorAction->isChecked();
-    standarExpectedOutputInspector->setVisible( ! checked );
-	standardErrorInspector->setVisible( checked );
+    standardExpectedOutputInspector->setVisible( ! checked );
+    standardProgramOutputInspector->setVisible( checked );
 }
 
 

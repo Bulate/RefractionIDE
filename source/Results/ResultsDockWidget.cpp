@@ -49,7 +49,8 @@ ResultsDockWidget::ResultsDockWidget(QWidget* parent, Qt::WindowFlags flags)
 
 void ResultsDockWidget::createTestCasesTabs(int testCasesCount
                                             , const QList<QFile *> &testCaseInputs
-                                            , const QList<QFile *> &testCaseOutputs)
+                                            , const QList<QFile *> &testCaseOutputs
+                                            , const QList<QFile *> &testProgramOutputs)
 {
 //	std::cerr << "Voy a entrar " << testCasesCount;
      for (int index = 0; index < testCasesCount; ++ index)
@@ -59,6 +60,7 @@ void ResultsDockWidget::createTestCasesTabs(int testCasesCount
          resultsTabWidget->addTab(standardInputOutputInspector, QString::number(index + 1));
          standardInputOutputInspector->setInput(testCaseInputs.at(index));
          standardInputOutputInspector->setOutput(testCaseOutputs.at(index));
+         standardInputOutputInspector->setProgramOutput(testProgramOutputs.at(index));
 
      }
 }

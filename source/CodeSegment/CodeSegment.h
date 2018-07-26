@@ -143,6 +143,9 @@ signals:
     /// action in Run action
     /// @param name Send "Run" or "Resume"
     void setupRunAction(const QString& name, bool enabled);
+
+    /// Gets the test cases information
+    void getTestCaseInfo(QDir workingDirectory);
     ///Reads test cases
     void loadTestCases(QDir workingDirectory);
 //	/// Converts the RunPause action into a Pause action

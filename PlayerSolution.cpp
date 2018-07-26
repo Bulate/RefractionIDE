@@ -27,11 +27,17 @@ QFileInfoList PlayerSolution::getInputInfo() const
 {
     return inputInfo;
 }
+QFileInfoList PlayerSolution::getProgramOutputsInfo() const
+{
+    return programOutputsInfo;
+}
 
-QFileInfoList PlayerSolution::getProgramOutputs() const
+QList<QFile *> PlayerSolution::getProgramOutputs() const
 {
     return programOutputs;
 }
+
+
 
 PlayerSolution::PlayerSolution(QObject *parent) : QObject(parent)
 {
@@ -59,8 +65,12 @@ void PlayerSolution::addOutput(QFile* file)
 {
     this->testCaseOutputs.append(file);
 }
-
-void PlayerSolution::addProgramOutput(QFileInfo info)
+void PlayerSolution::addProgramOutput(QFile* file)
 {
-    this->programOutputs.append(info);
+    this->programOutputs.append(file);
+}
+
+void PlayerSolution::addProgramOutputInfo(QFileInfo info)
+{
+    this->programOutputsInfo.append(info);
 }
