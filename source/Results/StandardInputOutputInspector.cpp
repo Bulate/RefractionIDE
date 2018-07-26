@@ -43,9 +43,6 @@ void StandardInputOutputInspector::buildInspector()
     standardProgramOutputInspector->setFont(font);
     standardProgramOutputInspector->setStyleSheet("background: rgb(150,222,255);");
     addWidget(standardProgramOutputInspector);
-
-
-
 }
 
 void StandardInputOutputInspector::setInput(QFile* file)

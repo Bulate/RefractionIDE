@@ -59,7 +59,7 @@ void ResultsDockWidget::createTestCasesTabs(int testCasesCount
 											, const QDir workingDirectory )
 {
 //	std::cerr << "Voy a entrar " << testCasesCount;
-     for (int index = 0; index < testCasesCount; ++ index)
+     for (int index = 0; index <outputInfoList.size(); ++ index)
      {
          standardInputOutputInspector = new StandardInputOutputInspector();
          QIcon* toolsOutputIcon;
@@ -69,7 +69,6 @@ void ResultsDockWidget::createTestCasesTabs(int testCasesCount
 		 {
              toolsOutputIcon = new QIcon(":/unit_playing/buttons/error.svg");
 			 generateDiffFile( outputInfoList, programOutputInfoList, workingDirectory , index);
-			 testSlot();
 		 }
          resultsTabWidget->addTab(standardInputOutputInspector, *toolsOutputIcon, QString::number(index + 1));
          standardInputOutputInspector->setInput(testCaseInputs.at(index));
@@ -84,71 +83,53 @@ void ResultsDockWidget::generateDiffFile(  const QFileInfoList &outputInfoList
 										 , const QDir workingDirectory
 										 , int index )
 {
-	//this->workingDirectory = workingDirectory;
+     this->workingDirectoryPath = workingDirectory.absolutePath();
 	 QString diffCall = "diff";
 	 QStringList arguments;
-	 QProcess* myProcess = new QProcess(this);
-	 myProcess->setProgram("diff");
+     QProcess* diffProcess = new QProcess(this);
+     diffProcess->setProgram("diff");
 
+     QString outputFileDiffPath;
 
-	 this->outputFileHtmlfPath.sprintf("%s%c%s%03d%s", workingDirectory.absolutePath().toStdString().c_str()
-								, QDir::separator().toLatin1() , "p_output" , index+1 , ".html");
-
-
-	 this->outputFileDiffPath.sprintf("%s%c%s%03d%s", workingDirectory.absolutePath().toStdString().c_str()
+     outputFileDiffPath.sprintf("%s%c%s%03d%s", workingDirectory.absolutePath().toStdString().c_str()
 								, QDir::separator().toLatin1() , "p_output" , index+1 , ".diff");
-	 myProcess->setReadChannelMode(QProcess::SeparateChannels);
-	 myProcess->setStandardOutputFile( outputFileDiffPath );
 
+     diffProcess->setReadChannelMode(QProcess::SeparateChannels);
+     diffProcess->setStandardOutputFile( outputFileDiffPath );
 	 arguments <<  "-w" <<  "-U 1000" << outputInfoList.at(index).absoluteFilePath()
-			   << programOutputInfoList.at(index).absoluteFilePath();
-	 myProcess->setArguments(arguments);
-
-	 myProcess->start(diffCall, arguments);
-
-
-
+               << programOutputInfoList.at(index).absoluteFilePath();
+     diffProcess->setArguments(arguments);
+     //connect(diffProcess, &QProcess::finished, this, &ResultsDockWidget::callDiff2Html);
+     connect(diffProcess, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(callDiff2Html()));
+     diffProcess->start(diffCall, arguments);
 
 }
 
-void ResultsDockWidget::testSlot()
+void ResultsDockWidget::callDiff2Html()
 {
-	QString diffCall = "diff2html";
+    int index = 2;
+    //std::cerr << "ENTRE" << this->workingDirectoryPath.toStdString();
+    QString outputFileDiffPathT;
+
+    outputFileDiffPathT.sprintf("%s%c%s%03d%s", this->workingDirectoryPath.toStdString().c_str()
+                               , QDir::separator().toLatin1() , "p_output" , index+1 , ".diff");
+    QString outputFileHtmlPath;
+
+    outputFileHtmlPath.sprintf("%s%c%s%03d%s", this->workingDirectoryPath.toStdString().c_str()
+                               , QDir::separator().toLatin1() , "p_output" , index+1 , ".html");
+
+    QString diff2HtmlCall = "diff2html";
 	QStringList arguments;
-	QProcess* myProcess = new QProcess(this);
-	myProcess->setProgram("diff2html");
+    QProcess* diff2HtmlProcess = new QProcess(this);
 
 
-	myProcess->setReadChannelMode(QProcess::SeparateChannels);
-	myProcess->setStandardOutputFile( outputFileHtmlfPath );
+    diff2HtmlProcess->setReadChannelMode(QProcess::SeparateChannels);
 
-	arguments << "--su hidden" << "-i file" <<"--" << outputFileDiffPath;
-	myProcess->setArguments(arguments);
+    arguments << "--su" << "hidden" << "-i" <<  "file" << "-F" << outputFileHtmlPath <<"--" << outputFileDiffPathT;
 
-	myProcess->start(diffCall, arguments);
+    diff2HtmlProcess->start(diff2HtmlCall, arguments);
 }
 
-void ResultsDockWidget::generateHtmlFile( QString outputFileHtmlfPath, QString outputFileDiffPath)
-{
-
-	//diff2html --su hidden -i file -F "solution_diff.html" -- "output000.diff"
-
-	QString diffCall = "diff2html";
-	QStringList arguments;
-	QProcess* myProcess = new QProcess(this);
-	myProcess->setProgram("diff2html");
-
-
-	myProcess->setReadChannelMode(QProcess::SeparateChannels);
-	myProcess->setStandardOutputFile( outputFileHtmlfPath );
-
-	//arguments << "--su hidden" << "-i file" << <,"--" << outputFileDiffPath;
-	myProcess->setArguments(arguments);
-
-	myProcess->start(diffCall, arguments);
-	std::cerr << "Puto";
-
-}
 
 
 void ResultsDockWidget::appendDiagnostic(const Diagnostic* diagnostic)
