@@ -16,6 +16,7 @@
 #include <QComboBox>
 #include <QMainWindow>
 #include <QSlider>
+#include <QTextStream>
 #include <QToolBar>
 #include <QString>
 #include <QFileDialog>
@@ -44,11 +45,11 @@ void CodeSegment::runTestCases()
         //std::cerr << outputFilePath.toStdString();
         QFileInfo* outputFile = new QFileInfo( outputFilePath);
         playerSolution->addProgramOutputInfo(*outputFile);
-        runTestCase( solutionFile, inputFile , outputFile->absoluteFilePath(), index == inputs.size()-1 );
+        runTestCase( solutionFile, inputFile , outputFile->absoluteFilePath(), (index == inputs.size()-1), playerSolution->getTestCaseOutputs(), index);
     }
 }
 
-void CodeSegment::runTestCase(QString solutionFile, QString inputfile, QString outputfile, bool isLastFile)
+void CodeSegment::runTestCase(QString solutionFile, QString inputfile, QString outputfile, bool isLastFile, const QList<QFile *> &expectedOutput, int index)
 {
 
     // Create an object to call the user executable
@@ -194,35 +195,6 @@ void CodeSegment::setupRunToolbar()
     connect(runAction, &QAction::triggered, this, &CodeSegment::userRunOrPaused  );
     toolBar->addAction(runAction);
 
-//    // Create step forward action
-//    stepForwardAction = new QAction(QIcon(":/unit_playing/buttons/step_forward.svg"), tr("Step forward (&Next)"), this);
-//    stepForwardAction->setShortcut(QKeySequence("Ctrl+U"));
-//    stepForwardAction->setToolTip(tr("Step forward: run next statement (Ctrl+U)"));
-//    stepForwardAction->setEnabled(false);
-//    connect(stepForwardAction, SIGNAL(triggered()), this, SIGNAL(userSteppedForward()));
-//    toolBar->addAction(stepForwardAction);
-
-//    // Create the stop button
-//    stopAction = new QAction(QIcon(":/unit_playing/buttons/stop.svg"), tr("S&top"), this);
-//    stopAction->setShortcut(QKeySequence("Ctrl+T"));
-//    stopAction->setToolTip(tr("Stop the visualization (Ctrl+T)"));
-//    stopAction->setEnabled(true);
-//    connect(stopAction, SIGNAL(triggered()), this, SIGNAL(userStopped()));
-//    toolBar->addAction(stopAction);
-
-//    // Create the control that allows user to set the speed of the visualization
-//    visualizationSpeedSlider = new QSlider(Qt::Horizontal, this);
-//    visualizationSpeedSlider->setToolTip(tr("Visualization speed: left is slow, right is faster"));
-//    visualizationSpeedSlider->setMaximum(0);
-//    visualizationSpeedSlider->setMaximum(200);
-//    visualizationSpeedSlider->setFocusPolicy(Qt::WheelFocus);
-//    visualizationSpeedSlider->setTickPosition(QSlider::TicksBelow);
-//    visualizationSpeedSlider->setTickInterval(20);
-////	visualizationSpeedSlider->setValue( VisualizationSpeed::getInstance().getSpeed() );
-//    visualizationSpeedSlider->setSingleStep(5);
-//    visualizationSpeedSlider->setPageStep(10);
-//    connect(visualizationSpeedSlider, SIGNAL(valueChanged(int)), this, SLOT(visualizationSpeedChanged(int)));
-//    toolBar->addWidget(visualizationSpeedSlider);
     innerMainWindow->addToolBar(toolBar);
 
 }
@@ -261,48 +233,7 @@ void CodeSegment::setupRunAction(const QString& name, bool enabled)
 
 
 
-////void CodeSegment::setupPauseAction(bool enabled)
-////{
-////	runOrPauseAction->setObjectName("Pause");
-////	runOrPauseAction->setIcon(QIcon(":/unit_playing/buttons/pause.svg"));
-////	runOrPauseAction->setToolTip(tr("Pauses the visualization (Ctrl+P)"));
-////	runOrPauseAction->setShortcut(QKeySequence("Ctrl+P"));
 
-////	runOrPauseAction->setEnabled(enabled);
-////}
-
-//////void CodeSegment::loadPlayerCodeForUnit(PlayerSolution* playerSolution, Unit* unit)
-////{
-////	// We need the player solution later also
-////	Q_ASSERT(playerSolution);
-////	this->playerSolution = playerSolution;
-
-////	// Fill the file selector with the list of files that comprise this player solution
-////	fileSelector->clear();
-////	fileSelector->addItems( playerSolution->getEditableSourceNames() );
-
-////	// Ask the editor to show this source
-////	const QFileInfo& lastEditedFilePath = playerSolution->getLastEditedFilePath();
-////	codeEditor->setPlayerSolutionForUnit(unit, playerSolution);
-////	codeEditor->loadInitialFile( lastEditedFilePath.absoluteFilePath() );
-////	fileSelector->setCurrentText( lastEditedFilePath.fileName() );
-
-////	// Now the run button can be triggered
-////	runOrPauseAction->setEnabled(true);
-////}
-
-////void CodeSegment::playerSolutionBuilt(CompilednewFileTriggeredProgram* playerSolutionProgram)
-////{
-////	// ToDo: if there were compiling or linking errors, mark the lines
-
-////	// If player solution was built with no errors, it will be start animating
-////	if ( playerSolutionProgram->getErrorCount() == 0 )
-////	{
-////		// Save code editor cursors and clear them to reduce noise while animation
-////		Q_ASSERT(codeEditor);
-////		codeEditor->setAnimating(true);
-////	}
-////}
 
 void CodeSegment::openFolderTriggered()
 {
@@ -322,7 +253,14 @@ void CodeSegment::playerSolutionFinished(int exitCode, QProcess::ExitStatus exit
 {
 	Q_UNUSED(exitCode);
 	Q_UNUSED(exitStatus);    
-	this->loadTestCases(*workingDirectory);
+    this->loadTestCases(*workingDirectory);
+}
+
+void CodeSegment::checkTestCase(QFile* programOutput, QFile* expectedOutput)
+{
+    long firstDiff = this->findFirstDiff(*programOutput, *expectedOutput, true, true);
+    this->testCaseState.push_back(firstDiff == -1);
+    //std::cerr << "[" << firstDiff << "]"<< std::endl;
 }
 
 void CodeSegment::setPointerToResults(ResultsDockWidget* resultsDockWidget)
@@ -360,7 +298,6 @@ void CodeSegment::loadTestCases(QDir workingDirectory)
     QFile* tempTestCaseInput ;
     QFile* tempTestCaseOutput;
     QFile* tempProgramOutput;
-
     ///  Dp while there are test cases to load
     int count = 1;
     do
@@ -388,16 +325,19 @@ void CodeSegment::loadTestCases(QDir workingDirectory)
             this->playerSolution->addInput(tempTestCaseInput);
             this->playerSolution->addOutput(tempTestCaseOutput);
             this->playerSolution->addProgramOutput(tempProgramOutput);
+            checkTestCase(tempTestCaseOutput, tempProgramOutput);
 //			std::cerr << "Me lei" ;
         }
 
         ++count;
     } while (tempTestCaseInput->exists());
 
+
     this->parentMainWindow->updateResultsDockWidfget(playerSolution->getTestCasesCount()
                                                      , playerSolution->getTestCaseInputs()
                                                      , playerSolution->getTestCaseOutputs()
-                                                     , playerSolution->getProgramOutputs());
+                                                     , playerSolution->getProgramOutputs()
+                                                     , this->testCaseState);
 
 
 }
@@ -425,110 +365,113 @@ QFile* CodeSegment::createSolutionFile(QDir& workingDirectory)
 //	codeEditor->loadFile( playerSolution->getPlayerUnitSourcePath(text) );
 //}
 
-////void CodeSegment::visualizationSpeedChanged(int speed)
-////{
-////	qCInfo(logPlayer) << "Visualization speed set to " << speed;
-////	VisualizationSpeed::getInstance().updateSpeed(speed);
-////}
 
-////void CodeSegment::diagnosticSelected(int index)
-////{
-////	Q_ASSERT(playerSolution);
-////	Q_ASSERT(playerSolution->getPlayerSolutionProgram());
-////	Compiler* compiler = playerSolution->*/getPlayerSolutionProgram()->getCompiler();
+long CodeSegment::findFirstDiff(QFile& inputFile1, QFile& inputFile2, bool ignoreWhitespace, bool caseSensitive)
+{
+    if ( inputFile1.open(QIODevice::ReadOnly | QIODevice::Text) == false )
+    {
+        inputFile1.close();
+        return -2;
+    }
+    if ( inputFile2.open(QIODevice::ReadOnly | QIODevice::Text) == false )
+    {
+        inputFile1.close();
+        inputFile2.close();
+        return -2;
+    }
 
-////	Q_ASSERT(compiler);
-////	Q_ASSERT(index >= 0);
-////	Q_ASSERT(index < compiler->getAllDiagnostics().size());
+    // If both files are empty, they match
 
-////	// Get the diagnostic that was selected
-////	Diagnostic* diagnostic = compiler->getAllDiagnostics()[index];
+    if ( inputFile1.atEnd() || inputFile2.atEnd() )
+    {
+        inputFile1.close();
+        inputFile2.close();
+        return -1;
+    }
 
-////	// If the diagnostic was produced by a file that is not part of the player solution, for
-////	// example, an external library, do not open the file in the Code Editor
-////	QFileInfo filePath(diagnostic->getFilename());
-////	if ( playerSolution->findFileIndex(filePath) == -1 )
-////		return;
+    // At least one file has data, we have to read them to compare
+    QTextStream inputText1(&inputFile1);
+    QTextStream inputText2(&inputFile2);
 
-////	// The file is part of the solution. Select it in the file selector
-////	fileSelector->setCurrentText( filePath.fileName() );
+    // Used to know the current position in files
+    long position1 = 0;
+    QChar ch1 = 0;
+    QChar ch2 = 0;
 
-////	// Place the cursor on the line and column where the diagnostic was detected
-////	codeEditor->placeCursor( diagnostic->getLine(), diagnostic->getColumn() );
-////}
+    // Read until reaching the first EOF
+    while ( ! inputText1.atEnd() )
+    {
+        if ( inputText2.atEnd() )
+        {
+            inputFile1.close();
+            inputFile2.close();
+            return position1;
+        }
 
-////QList<GuiBreakpoint*> CodeSegment::retrieveBreakpoints()
-////{
-////	// ToDo: for each opened source file (i.e. have several code editors open)
-////	return codeEditor->retrieveBreakpoints();
-////}
+        // Get the next char of each file
+        ch1 = readNextChar(inputText1, ignoreWhitespace, caseSensitive, ch1 == ' ', &position1);
+        ch2 = readNextChar(inputText2, ignoreWhitespace, caseSensitive, ch2 == ' ');
 
-////void CodeSegment::onStateChanged(UnitPlayingState currentState)
-////{
-////	// If user asked to build, save changes in all editors (if any)
-////	if ( currentState == UnitPlayingState::building )
-////		codeEditor->saveChanges();
+        // Compare the next character of each file
+        if ( ch1 != ch2 )
+        {
+            inputFile1.close();
+            inputFile2.close();
+            return position1;
+        }
 
-////	// Visualization control buttons enable or disable depending on the current state
-////	bool run      = currentState == UnitPlayingState::editing;
-////	bool resume   = currentState == UnitPlayingState::paused;
-////	bool pause    = currentState == UnitPlayingState::animating;
-////	bool step     = currentState == UnitPlayingState::paused;
+        // Both files are identical until this char, continue
+    }
 
-////	bool stop     = currentState == UnitPlayingState::animating
-////				 || currentState == UnitPlayingState::paused
-////				 || currentState == UnitPlayingState::finished;
+    // If there is remaining expected information that player did not produced, fail
+    if ( ! inputFile2.atEnd() )
+    {
+        inputFile1.close();
+        inputFile2.close();
+        return position1;
+    }
 
-////	// Enable actions according to the current state
-////	stepForwardAction->setEnabled(step);
-////	stopAction->setEnabled(stop);
+    // We did not find any difference
+    inputFile1.close();
+    inputFile2.close();
+    return -1;
+}
 
-////	// Run or pause share the same action
-////	if ( run )
-////		setupRunAction("Run", true);
-////	else if ( resume )
-////		setupRunAction("Resume", true);
-////	else if ( pause )
-////		setupPauseAction(true);
-////	else
-////		runOrPauseAction->setEnabled(false);
-////}
+QChar CodeSegment::readNextChar(QTextStream& input, bool ignoreWhitespace, bool caseSensitive, bool eatWhitespace, long* position)
+{
+    // Read the next character
+    QChar ch = -1;
 
-////void CodeSegment::clearAnimation()
-////{
-////	// Remove all the highlights in code editors
-////	Q_ASSERT(codeEditor);
-////	codeEditor->setAnimating(false);
-////}
+    // We may need to repeat when ignoring whitespace
+    while ( ! input.atEnd() )
+    {
+        // Read the character
+        input >> ch;
 
-////void CodeSegment::executionThreadUpdated(ExecutionThread* executionThread, int& maxDuration)
-////{
-////	// Get the file index of the execution thread
-////	Q_UNUSED(maxDuration);
-////	Q_ASSERT(playerSolution);
+        // We have read a character, advance the position counter
+        if ( position )
+            ++(*position);
 
-////	// If we have to clear the previous highlighted line
-////	if ( executionThread->getPreviousLineNumber() > 0 )
-////	{
-////		// Clear the previous highlighted line only if this is the shown file
-////		int fileIndex = playerSolution->findFileIndex( executionThread->getPreviousFilename() );
-////		if ( fileIndex >= 0 && fileIndex == fileSelector->currentIndex() )
-////			codeEditor->clearHighlight( executionThread->getPreviousLineNumber(), executionThread->getHighlightColor(), false );
-////	}
+        // If we have to ignore case, we convert all characters to lowercase
+        if ( caseSensitive == false )
+            ch = ch.toLower();
 
-////	// If we have to highlight the line being executed
-////	if ( executionThread->getLineNumber() > 0 )
-////	{
-////		// Clear the previous highlighted line only if this is the shown file
-////		int fileIndex = playerSolution->findFileIndex( executionThread->getFilename() );
-////		if ( fileIndex >= 0 && fileIndex == fileSelector->currentIndex() )
-////		{
-////			codeEditor->addHighlight( executionThread->getLineNumber(), executionThread->getHighlightColor(), true );
-////			codeEditor->makeLineVisible( executionThread->getLineNumber() );
+        // If we got a non space character, we have found the next character
+        if ( ! ch.isSpace() )
+            return ch;
 
-////			// The update was accepted, we feedback the execution thread in order to update the
-////			// line number on the actor (robot) and make a backup of the filename and line number
-////			updateMaxDuration( executionThread->locationUpdateAccepted() );
-////		}
-////	}
-////}
+        // We found a whitespace character, if they must be match exact, return it
+        if ( ! ignoreWhitespace )
+            return ch;
+
+        // We found a whitespace character and are ignoring them, uniform them to spaces
+        ch = ' ';
+
+        // If asked to eat whitespaces, we continue the while, otherwise we stop here
+        if ( ! eatWhitespace )
+            return ch;
+    }
+
+    return ch;
+}
+

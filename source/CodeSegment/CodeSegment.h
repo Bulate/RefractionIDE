@@ -4,19 +4,22 @@
 
 #include <QDockWidget>
 #include <QProcess>
+#include <QFileInfo>
+#include <QChar>
 
 class CodeEditor;
 //class Compiler;
 //class CompiledProgram;
 //class ExecutionThread;
+
 class QFile;
 class QAction;
 class QComboBox;
+class QTextStream;
 class QMainWindow;
 class QSlider;
 class MainWindow;
 class QDir;
-class QFileInfo;
 //class Player;
 class QProcess;
 class PlayerSolution;
@@ -64,6 +67,7 @@ class CodeSegment : public QDockWidget
     QAction* saveAction;
     QDir* workingDirectory;
     QProcess* process;
+    QList<bool> testCaseState;
 
 
 
@@ -98,7 +102,9 @@ class CodeSegment : public QDockWidget
 //  void loadPlayerCodeForUnit(PlayerSolution* playerSolution, Unit* unit);
     void setPointerToResults(ResultsDockWidget* resultsDockWidget);
     const QString& getFilePath();
-	void runTestCase(QString solutionFile, QString inputfile, QString outputfile, bool isLastFile);
+    void runTestCase(QString solutionFile, QString inputfile, QString outputfile, bool isLastFile, const QList<QFile *> &expectedOutput, int index);
+    long findFirstDiff(QFile &inputFile1, QFile &inputFile2, bool ignoreWhitespace, bool caseSensitive);
+    QChar readNextChar(QTextStream& input, bool ignoreWhitespace, bool caseSensitive, bool eatWhitespace, long* position = nullptr);
 //	/// Called when user selects one of the diagnostics in the tools output
 //	/// @param index The index of the selected diagnostic in the allDiagnostics list
 //	void diagnosticSelected(int index);
@@ -157,6 +163,7 @@ signals:
     void openFolderTriggered();
 	/// Called when the solution has been run, to display the result on screen
 	void playerSolutionFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void checkTestCase(QFile *programOutput, QFile *expectedOutput);
 //	/// Called when player selects another source file in the file selector combo box
 //	void fileSelectorIndexChanged(const QString& text);
 //	/// Called when the visualization speed is changed by user

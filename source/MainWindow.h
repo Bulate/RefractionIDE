@@ -52,7 +52,8 @@ class MainWindow : public QMainWindow
     void updateResultsDockWidfget(int testCasesCount
                                   , const QList<QFile *>& testCaseInputs
                                   , const QList<QFile *>& testCaseOutputs
-                                  , const QList<QFile *>& testProgramOutputs);
+                                  , const QList<QFile *>& testProgramOutputs
+                                  , const QList<bool> testCaseState);
 
   protected slots:
     /// Compiles and runs

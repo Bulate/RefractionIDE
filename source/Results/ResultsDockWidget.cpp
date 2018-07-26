@@ -50,14 +50,19 @@ ResultsDockWidget::ResultsDockWidget(QWidget* parent, Qt::WindowFlags flags)
 void ResultsDockWidget::createTestCasesTabs(int testCasesCount
                                             , const QList<QFile *> &testCaseInputs
                                             , const QList<QFile *> &testCaseOutputs
-                                            , const QList<QFile *> &testProgramOutputs)
+                                            , const QList<QFile *> &testProgramOutputs
+                                            , const QList<bool> testCaseState)
 {
 //	std::cerr << "Voy a entrar " << testCasesCount;
      for (int index = 0; index < testCasesCount; ++ index)
      {
-
          standardInputOutputInspector = new StandardInputOutputInspector();
-         resultsTabWidget->addTab(standardInputOutputInspector, QString::number(index + 1));
+         QIcon* toolsOutputIcon;
+         if (testCaseState.at(index))
+             toolsOutputIcon = new QIcon(":/unit_playing/buttons/accept.svg");
+         else
+             toolsOutputIcon = new QIcon(":/unit_playing/buttons/error.svg");
+         resultsTabWidget->addTab(standardInputOutputInspector, *toolsOutputIcon, QString::number(index + 1));
          standardInputOutputInspector->setInput(testCaseInputs.at(index));
          standardInputOutputInspector->setOutput(testCaseOutputs.at(index));
          standardInputOutputInspector->setProgramOutput(testProgramOutputs.at(index));
