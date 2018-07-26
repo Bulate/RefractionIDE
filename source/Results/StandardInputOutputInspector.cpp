@@ -41,7 +41,7 @@ void StandardInputOutputInspector::buildInspector()
     standardProgramOutputInspector = new QTextEdit();
     standardProgramOutputInspector->setReadOnly(true);
     standardProgramOutputInspector->setFont(font);
-    standardProgramOutputInspector->setStyleSheet("background: rgb(150,222,255);");
+    standardProgramOutputInspector->setStyleSheet("background: rgb(255, 255, 255);");
     addWidget(standardProgramOutputInspector);
 }
 

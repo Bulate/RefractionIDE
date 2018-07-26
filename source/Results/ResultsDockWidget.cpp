@@ -68,10 +68,11 @@ void ResultsDockWidget::createTestCasesTabs(int testCasesCount
 //	std::cerr << "Voy a entrar " << testCasesCount;
      for (int index = 0; index <outputInfoList.size(); ++ index)
      {
-         standardInputOutputInspector = new StandardInputOutputInspector();
+
          QIcon* toolsOutputIcon;
          if (testCaseState.at(index))
          {
+             standardInputOutputInspector = new StandardInputOutputInspector();
              toolsOutputIcon = new QIcon(":/unit_playing/buttons/accept.svg");
              resultsTabWidget->addTab(standardInputOutputInspector, *toolsOutputIcon, QString::number(index + 1));
              standardInputOutputInspector->setInput(testCaseInputs.at(index));
@@ -89,6 +90,7 @@ void ResultsDockWidget::createTestCasesTabs(int testCasesCount
 
 void ResultsDockWidget::createTabs(int index, QString outputHTMLPath)
 {
+    standardInputOutputInspector = new StandardInputOutputInspector();
     QIcon* toolsOutputIcon = new QIcon(":/unit_playing/buttons/error.svg");
     resultsTabWidget->addTab(standardInputOutputInspector, *toolsOutputIcon, QString::number(index + 1));
     QFile* tempInputFile = new QFile(this->testCaseInputInfo.at(index).absoluteFilePath());
