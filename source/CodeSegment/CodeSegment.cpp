@@ -27,6 +27,26 @@
 // Default width and height of the tools in toolbars
 const int toolBarIconSize = 18;
 
+
+CodeSegment::CodeSegment(MainWindow* parent, Qt::WindowFlags flags)
+	: QDockWidget(tr("Program Options"), parent, flags)
+	, innerMainWindow( new QMainWindow(this))
+	, parentMainWindow(parent)
+{
+	setObjectName("codeSegment");
+	setFeatures(QDockWidget::NoDockWidgetFeatures);
+	setupInnerWidget();
+	setupCodeEditor(); // It must be called before the toolbars
+	setupEditingToolbar();
+	innerMainWindow->addToolBarBreak();
+	setupRunToolbar();
+}
+
+CodeSegment::~CodeSegment()
+{
+}
+
+// Rgetter method for the working directory attribute
 QDir *CodeSegment::getWorkingDirectory() const
 {
     return workingDirectory;
@@ -42,19 +62,19 @@ void CodeSegment::runTestCases()
         QString inputFile = inputs.at(index).absoluteFilePath();
         QString outputFilePath;
         outputFilePath.sprintf("%s%c%s%03d%s", this->getWorkingDirectory()->absolutePath().toStdString().c_str(), QDir::separator().toLatin1() , "p_output" , index+1 , ".txt");
-        //std::cerr << outputFilePath.toStdString();
         QFileInfo* outputFile = new QFileInfo( outputFilePath);
         playerSolution->addProgramOutputInfo(*outputFile);
         runTestCase( solutionFile, inputFile , outputFile->absoluteFilePath(), (index == inputs.size()-1), playerSolution->getTestCaseOutputs(), index);
     }
 }
 
+/// Called to the process of running the test cases
 void CodeSegment::runTestCase(QString solutionFile, QString inputfile, QString outputfile, bool isLastFile, const QList<QFile *> &expectedOutput, int index)
 {
-
     // Create an object to call the user executable
     QProcess* process = new QProcess(this);
 
+	// is the last, call to playerSolutionFinished
 	if(isLastFile)
 		connect( process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(playerSolutionFinished(int,QProcess::ExitStatus)) );
 
@@ -63,24 +83,6 @@ void CodeSegment::runTestCase(QString solutionFile, QString inputfile, QString o
     process->setStandardInputFile( inputfile );
     process->setStandardOutputFile( outputfile );
     process->start( solutionFile );
-}
-
-CodeSegment::CodeSegment(MainWindow* parent, Qt::WindowFlags flags)
-    : QDockWidget(tr("Program Options"), parent, flags)
-    , innerMainWindow( new QMainWindow(this))
-    , parentMainWindow(parent)
-{
-    setObjectName("codeSegment");
-    setFeatures(QDockWidget::NoDockWidgetFeatures);
-    setupInnerWidget();
-    setupCodeEditor(); // It must be called before the toolbars
-    setupEditingToolbar();
-    innerMainWindow->addToolBarBreak();
-    setupRunToolbar();
-}
-
-CodeSegment::~CodeSegment()
-{
 }
 
 void CodeSegment::setupInnerWidget()
@@ -98,7 +100,7 @@ void CodeSegment::setupEditingToolbar()
     QToolBar* editToolBar = innerMainWindow->addToolBar(tr("Edit"));
     editToolBar->setIconSize( QSize(toolBarIconSize, toolBarIconSize) );
 
-    // Opens a new file in the solution
+	// create buttom opens a new file in the solution
     openFolderAction = new QAction(QIcon(":/unit_playing/buttons/new_file.svg"), tr("&Open Folder"), this);
     openFolderAction->setObjectName("openFolder");
     openFolderAction->setShortcut(QKeySequence("Ctrl+N"));
@@ -107,7 +109,7 @@ void CodeSegment::setupEditingToolbar()
     editToolBar->addAction(openFolderAction);
 
 
-    // Save file in the solution
+	// create buttom  save file in the solution
     saveAction = new QAction(QIcon(":/unit_playing/buttons/save.svg"), tr("&Save File"), this);
     saveAction->setObjectName("save");
     saveAction->setShortcut(QKeySequence("Ctrl+S"));
@@ -117,7 +119,7 @@ void CodeSegment::setupEditingToolbar()
     editToolBar->addAction(saveAction);
 
 
-    // Undo
+	// create buttom Undo
     undoAction = new QAction(QIcon(":/unit_playing/buttons/undo.svg"), tr("&Undo"), this);
     undoAction->setObjectName("undo");
     undoAction->setEnabled(false);
@@ -127,7 +129,7 @@ void CodeSegment::setupEditingToolbar()
     connect(undoAction, SIGNAL(triggered()), codeEditor, SLOT(undo()));
     editToolBar->addAction(undoAction);
 
-    // Redo
+	// create buttom Redo
     redoAction = new QAction(QIcon(":/unit_playing/buttons/redo.svg"), tr("&Redo"), this);
     redoAction->setObjectName("redo");
     redoAction->setEnabled(false);
@@ -137,7 +139,7 @@ void CodeSegment::setupEditingToolbar()
     connect(redoAction, SIGNAL(triggered()), codeEditor, SLOT(redo()));
     editToolBar->addAction(redoAction);
 
-    // Cut
+	// create buttom Cut
     cutAction = new QAction(QIcon(":/unit_playing/buttons/cut.svg"), tr("C&ut"), this);
     cutAction->setObjectName("cut");
     cutAction->setEnabled(false);
@@ -147,7 +149,7 @@ void CodeSegment::setupEditingToolbar()
     connect(cutAction, SIGNAL(triggered()), codeEditor, SLOT(cut()));
     editToolBar->addAction(cutAction);
 
-    // Copy
+	// create buttom Copy
     copyAction = new QAction(QIcon(":/unit_playing/buttons/copy.svg"), tr("&Copy"), this);
     copyAction->setObjectName("copy");
     copyAction->setEnabled(false);
@@ -157,7 +159,7 @@ void CodeSegment::setupEditingToolbar()
     connect(copyAction, SIGNAL(triggered()), codeEditor, SLOT(copy()));
     editToolBar->addAction(copyAction);
 
-    // Paste
+	// create buttom Paste
     pasteAction = new QAction(QIcon(":/unit_playing/buttons/paste.svg"), tr("&Paste"), this);
     pasteAction->setObjectName("paste");
     pasteAction->setEnabled(false);
@@ -196,7 +198,6 @@ void CodeSegment::setupRunToolbar()
     toolBar->addAction(runAction);
 
     innerMainWindow->addToolBar(toolBar);
-
 }
 
 
@@ -208,12 +209,8 @@ void CodeSegment::setupCodeEditor()
     // The code editor is a QTextEdit object
     codeEditor = new CodeEditor(this);
 
-//	// Propagate events to the visualization controller and the debugger
-    //connect( codeEditor, SIGNAL(breakpointAction(GuiBreakpoint*)), this, SIGNAL(breakpointAction(GuiBreakpoint*)) );
-
     // Place the code editor as the central widget of this dock widget
     innerMainWindow->setCentralWidget(codeEditor);
-
 
     // Do not force users to click the editor in order to start typing on it
     codeEditor->setFocus();
@@ -221,19 +218,14 @@ void CodeSegment::setupCodeEditor()
 
 void CodeSegment::setupRunAction(const QString& name, bool enabled)
 {
+	 // create and setup buttom RunAction
     runOrPauseAction = new QAction(this);
-
     runOrPauseAction->setObjectName(name);
     runOrPauseAction->setIcon( QIcon(":/unit_playing/buttons/run.svg") );
     runOrPauseAction->setToolTip(name == "Run" ? tr("Run: compiles the code and starts the visualization (Ctrl+R)") : tr("Resumes the visualization (Ctrl+R)"));
     runOrPauseAction->setShortcut(QKeySequence("Ctrl+R"));
-
     runOrPauseAction->setEnabled(enabled);
 }
-
-
-
-
 
 void CodeSegment::openFolderTriggered()
 {
@@ -244,27 +236,27 @@ void CodeSegment::openFolderTriggered()
     this->playerSolution->addSolutionFile(tempSolution);
     this->codeEditor->loadFileContents(tempSolution);
     this->getTestCaseInfo(*workingDirectory);
-//	connect(openFolderAction, SIGNAL(triggered()), parentMainWindow, SIGNAL(updateResultsDockWidfget())  );
-//	this->resultsDockWidget->createTestCasesTabs();
-
 }
 
 void CodeSegment::playerSolutionFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
 	Q_UNUSED(exitCode);
-	Q_UNUSED(exitStatus);    
+	Q_UNUSED(exitStatus);
+
+	// call to the method that loads the test cases
     this->loadTestCases(*workingDirectory);
 }
 
 void CodeSegment::checkTestCase(QFile* programOutput, QFile* expectedOutput)
 {
+	// check if two documents are the same
     long firstDiff = this->findFirstDiff(*programOutput, *expectedOutput, true, true);
     this->testCaseState.push_back(firstDiff == -1);
-    //std::cerr << "[" << firstDiff << "]"<< std::endl;
 }
 
 void CodeSegment::setPointerToResults(ResultsDockWidget* resultsDockWidget)
 {
+	// ToDo: delete method
     (void) resultsDockWidget;
 }
 
@@ -272,7 +264,6 @@ const QString &CodeSegment::getFilePath()
 {
     return this->codeEditor->filepath;
 }
-
 
 void CodeSegment::getTestCaseInfo(QDir workingDirectory)
 {
@@ -300,6 +291,7 @@ void CodeSegment::getTestCaseInfo(QDir workingDirectory)
         ++count;
 	}while (tempInputInfo->exists());
 }
+
 void CodeSegment::loadTestCases(QDir workingDirectory)
 {
     QFile* tempTestCaseInput ;
@@ -309,37 +301,37 @@ void CodeSegment::loadTestCases(QDir workingDirectory)
     int count = 1;
     do
     {
+	   //set formar the file input name
         QString inputName;
         inputName.sprintf("%s%03d%s", "input", count, ".txt");
-        QString* inputPath = new QString(workingDirectory.filePath(inputName));
+		QString* inputPath = new QString(workingDirectory.filePath(inputName));
 
+		//set formar the file output name
         QString outputName;
         outputName.sprintf("%s%03d%s", "output", count, ".txt");
         QString* outputPath = new QString(workingDirectory.filePath(outputName));
 
-        QString pOutputName;
+		//set formar the file program output name
+		QString pOutputName;
         pOutputName.sprintf("%s%03d%s", "p_output", count, ".txt");
         QString* pOutputPath = new QString(workingDirectory.filePath(pOutputName));
 
-        //std::cerr<<tempPath->toStdString()
         tempTestCaseInput = new QFile(*inputPath);
         tempTestCaseOutput = new QFile(*outputPath);
         tempProgramOutput = new QFile(*pOutputPath);
 
         if (tempTestCaseInput->exists() && tempTestCaseOutput->exists() && tempProgramOutput->exists())
         {
-            //codeEditor->filepath = *inputPath;
             this->playerSolution->addInput(tempTestCaseInput);
             this->playerSolution->addOutput(tempTestCaseOutput);
             this->playerSolution->addProgramOutput(tempProgramOutput);
             checkTestCase(tempTestCaseOutput, tempProgramOutput);
-//			std::cerr << "Me lei" ;
         }
 
         ++count;
     } while (tempTestCaseInput->exists());
 
-
+	// call method that update the Result Dock Widget
     this->parentMainWindow->updateResultsDockWidfget(playerSolution->getTestCasesCount()
 													 , playerSolution->getTestCaseInputs()
                                                      , playerSolution->getTestCaseOutputs()
@@ -368,14 +360,6 @@ QFile* CodeSegment::createSolutionFile(QDir& workingDirectory)
     }
     return new QFile();
 }
-
-
-//void CodeSegment::fileSelectorIndexChanged(const QString& text)
-//{
-//	// Get the full path to the filename and load it in the code editor
-//	codeEditor->loadFile( playerSolution->getPlayerUnitSourcePath(text) );
-//}
-
 
 long CodeSegment::findFirstDiff(QFile& inputFile1, QFile& inputFile2, bool ignoreWhitespace, bool caseSensitive)
 {
