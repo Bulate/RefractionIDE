@@ -8,6 +8,7 @@
 #include <QProcess>
 #include <QDir>
 
+
 ResultsDockWidget::ResultsDockWidget(QWidget* parent, Qt::WindowFlags flags)
     : QDockWidget(tr("Results"), parent, flags)
     //, compiler(nullptr)
@@ -82,7 +83,8 @@ void ResultsDockWidget::createTestCasesTabs(int testCasesCount
          else
 		 {                
                 DiffFileGenerator* diffGenerator = new DiffFileGenerator(this, outputInfoList, programOutputInfoList, workingDirectory, index);
-                connect(diffGenerator, SIGNAL(htmlFileGenerated(int,QString)), this, SLOT(createTabs(int,QString)) );
+                connect(diffGenerator, &DiffFileGenerator::htmlFileGenerated, this, &ResultsDockWidget::createTabs );
+//  connect(diffGenerator, SIGNAL(htmlFileGenerated(int,QString)), this, SLOT(createTabs(int,QString)) );
                 diffGenerator->generateDiffFile();
 		 }
      }
@@ -99,9 +101,6 @@ void ResultsDockWidget::createTabs(int index, QString outputHTMLPath)
     standardInputOutputInspector->setOutput(tempOutputFile);
     standardInputOutputInspector->setProgramOutputHTML(new QFile(outputHTMLPath));
 }
-
-
-
 
 
 

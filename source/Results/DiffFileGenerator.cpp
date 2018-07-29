@@ -3,6 +3,8 @@
 #include <QFile>
 #include <QProcess>
 #include <QDir>
+#include <QObject>
+#include <iostream>
 
 DiffFileGenerator::DiffFileGenerator( QObject* parent
                                      , const QFileInfoList &outputInfoList
@@ -59,8 +61,11 @@ void DiffFileGenerator::callDiff2Html()
     diff2HtmlProcess->setReadChannelMode(QProcess::SeparateChannels);
 
     arguments << "--su" << "hidden" << "-i" <<  "file" << "-F" << outputFileHtmlPath <<"--" << outputFileDiffPathT;
-    connect(diff2HtmlProcess, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(diff2HtmlFinished()) );
+// connect(diff2HtmlProcess, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(diff2HtmlFinished()) );
+    QObject::connect(diff2HtmlProcess, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), this,
+                     &DiffFileGenerator::diff2HtmlFinished   );
     diff2HtmlProcess->start(diff2HtmlCall, arguments);
+    diff2HtmlProcess->kill();
 }
 
 void DiffFileGenerator::diff2HtmlFinished()
